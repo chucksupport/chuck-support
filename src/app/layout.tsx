@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Sidebar } from "@/components/Sidebar";
 import { CartProvider } from "@/contexts/CartContext";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800", "900"],
+  display: "swap",
 });
 
 const geistMono = Geist_Mono({
@@ -35,12 +37,12 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} dark h-full antialiased`}
+      className={`${inter.variable} ${geistMono.variable} dark antialiased`}
     >
-      <body className="min-h-full flex bg-background text-foreground">
+      <body className="min-h-screen flex bg-background text-foreground">
         <CartProvider>
           <Sidebar />
-          <main className="flex-1 min-w-0 flex flex-col">
+          <main className="flex-1 min-w-0 flex flex-col pt-16 md:pt-0">
             {children}
           </main>
         </CartProvider>

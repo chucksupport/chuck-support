@@ -4,7 +4,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
 import { useCart } from "@/contexts/CartContext";
 
 const navLinks = [
@@ -23,71 +22,121 @@ export function Sidebar() {
 
   return (
     <>
-      {/* Mobile hamburger */}
-      <button
-        className="fixed top-4 left-4 z-50 md:hidden bg-card border border-border rounded-md p-2 text-foreground"
-        onClick={() => setMenuOpen((v) => !v)}
-        aria-label="Toggle navigation"
-      >
-        <span className="block w-5 h-0.5 bg-current mb-1" />
-        <span className="block w-5 h-0.5 bg-current mb-1" />
-        <span className="block w-5 h-0.5 bg-current" />
-      </button>
-
-      {/* Overlay for mobile */}
-      {menuOpen && (
-        <div
-          className="fixed inset-0 z-40 bg-black/60 md:hidden"
-          onClick={() => setMenuOpen(false)}
-        />
-      )}
-
-      {/* Sidebar panel */}
+      {/* ──────────────────────────────────────────
+          DESKTOP SIDEBAR
+      ────────────────────────────────────────── */}
       <aside
-        className={[
-          "fixed top-0 left-0 h-full z-40 flex flex-col",
-          "w-60 bg-sidebar border-r border-sidebar-border",
-          "transition-transform duration-200",
-          menuOpen ? "translate-x-0" : "-translate-x-full",
-          "md:translate-x-0 md:static md:flex",
-        ].join(" ")}
+        className="hidden md:flex flex-col w-56 shrink-0 h-screen sticky top-0 overflow-y-auto z-30"
+        style={{
+          background: "oklch(0.11 0.018 240 / 0.92)",
+          backdropFilter: "blur(20px)",
+          borderRight: "1px solid oklch(1 0 0 / 0.07)",
+        }}
       >
-        {/* Profile area */}
-        <div className="flex flex-col items-center gap-3 px-4 py-6">
-          <div className="w-24 h-24 rounded-full border-2 border-primary/40 overflow-hidden">
-            <img
-              src="/images/profile.jpg"
-              alt="Chuck"
-              className="w-full h-full object-cover"
+        {/* Right-edge accent gradient */}
+        <div
+          className="absolute right-0 top-0 bottom-0 w-px pointer-events-none"
+          style={{
+            background:
+              "linear-gradient(to bottom, transparent 0%, var(--px-40) 40%, var(--px-40) 60%, transparent 100%)",
+          }}
+        />
+
+        {/* Profile */}
+        <div className="flex flex-col items-center gap-3 px-4 py-8">
+          <div className="relative">
+            {/* Animated glow behind photo */}
+            <div
+              className="absolute rounded-full glow-blob pointer-events-none"
+              style={{
+                inset: "-6px",
+                background: "radial-gradient(circle, var(--px-40), transparent 70%)",
+              }}
             />
+            <div
+              className="relative w-20 h-20 rounded-full overflow-hidden"
+              style={{
+                border: "2px solid var(--px-50)",
+                boxShadow: "0 0 24px var(--px-20)",
+              }}
+            >
+              <img
+                src="/images/profile.jpg"
+                alt="Chuck"
+                className="w-full h-full object-cover"
+              />
+            </div>
           </div>
           <div className="text-center">
-            <p className="font-semibold text-sidebar-foreground text-sm">Chuck Support</p>
-            <p className="text-xs text-muted-foreground">chuck.support</p>
+            <p className="font-bold text-sm text-foreground tracking-tight">
+              Chuck Support
+            </p>
+            <p
+              className="text-xs font-medium mt-0.5"
+              style={{ color: "var(--primary)" }}
+            >
+              chuck.support
+            </p>
           </div>
         </div>
 
-        <Separator className="bg-sidebar-border" />
-
         {/* Nav links */}
-        <nav className="flex flex-col gap-1 px-2 py-4 flex-1">
+        <nav className="flex flex-col gap-0.5 px-2 flex-1 pb-4">
           {navLinks.map(({ href, label }) => {
             const active = pathname === href;
             return (
               <Link
                 key={href}
                 href={href}
-                onClick={() => setMenuOpen(false)}
-                className={[
-                  "flex items-center justify-between rounded-md px-3 py-2 text-sm font-medium transition-colors",
+                className="relative flex items-center justify-between rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200 group"
+                style={
                   active
-                    ? "bg-sidebar-accent text-sidebar-accent-foreground"
-                    : "text-sidebar-foreground hover:bg-sidebar-accent/60 hover:text-sidebar-accent-foreground",
-                ].join(" ")}
+                    ? {
+                        background: "var(--px-15)",
+                        color: "oklch(0.94 0.005 220)",
+                      }
+                    : undefined
+                }
+                onMouseEnter={(e) => {
+                  if (!active) {
+                    (e.currentTarget as HTMLAnchorElement).style.background =
+                      "oklch(1 0 0 / 0.04)";
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!active) {
+                    (e.currentTarget as HTMLAnchorElement).style.background =
+                      "transparent";
+                  }
+                }}
               >
-                <span>{label}</span>
+                {/* Active left accent bar */}
+                {active && (
+                  <span
+                    className="absolute left-0 top-1.5 bottom-1.5 w-0.5 rounded-full"
+                    style={{ background: "var(--primary)" }}
+                  />
+                )}
+
+                <span
+                  className="transition-colors duration-200"
+                  style={
+                    active
+                      ? { color: "var(--primary)" }
+                      : { color: "oklch(0.60 0.012 230)" }
+                  }
+                >
+                  {label}
+                </span>
+
                 {href === "/buy-support" && totalItems > 0 && (
-                  <Badge className="bg-primary text-primary-foreground text-xs px-1.5 py-0">
+                  <Badge
+                    className="text-xs px-1.5 py-0 border-0 font-bold"
+                    style={{
+                      background: "var(--primary)",
+                      color: "oklch(0.08 0 0)",
+                    }}
+                  >
                     {totalItems}
                   </Badge>
                 )}
@@ -96,14 +145,142 @@ export function Sidebar() {
           })}
         </nav>
 
-        <Separator className="bg-sidebar-border" />
-
         {/* Footer */}
-        <div className="px-4 py-4 text-xs text-muted-foreground text-center">
-          <p>© {new Date().getFullYear()} Chuck Support</p>
-          <p className="mt-0.5">Full-Service Digital Agency</p>
+        <div
+          className="px-4 py-4 text-center"
+          style={{ borderTop: "1px solid oklch(1 0 0 / 0.05)" }}
+        >
+          <p className="text-xs font-medium" style={{ color: "var(--px-50)" }}>
+            © {new Date().getFullYear()} chuck.support
+          </p>
         </div>
       </aside>
+
+      {/* ──────────────────────────────────────────
+          MOBILE: FLOATING CS BUTTON
+      ────────────────────────────────────────── */}
+      <button
+        onClick={() => setMenuOpen((v) => !v)}
+        className="fixed top-4 right-4 z-50 md:hidden w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 overflow-hidden"
+        style={{
+          background: menuOpen
+            ? "oklch(0.13 0.018 240 / 0.9)"
+            : "var(--primary)",
+          border: menuOpen
+            ? "1.5px solid var(--px-50)"
+            : "1.5px solid transparent",
+          boxShadow: menuOpen
+            ? "0 0 24px var(--px-30)"
+            : "0 0 28px var(--px-50), 0 4px 16px oklch(0 0 0 / 0.4)",
+          backdropFilter: menuOpen ? "blur(12px)" : "none",
+        }}
+        aria-label="Toggle navigation"
+      >
+        {/* "CS" label — visible when closed */}
+        <span
+          className="absolute font-black tracking-tight text-xs transition-all duration-300 select-none"
+          style={{
+            color: menuOpen ? "var(--primary)" : "oklch(0.08 0 0)",
+            opacity: menuOpen ? 0 : 1,
+            transform: menuOpen ? "scale(0.5) rotate(90deg)" : "scale(1) rotate(0deg)",
+          }}
+        >
+          CS
+        </span>
+        {/* "×" — visible when open */}
+        <span
+          className="absolute text-2xl leading-none font-light transition-all duration-300 select-none"
+          style={{
+            color: "var(--primary)",
+            opacity: menuOpen ? 1 : 0,
+            transform: menuOpen ? "scale(1) rotate(0deg)" : "scale(0.5) rotate(-90deg)",
+          }}
+        >
+          ×
+        </span>
+      </button>
+
+      {/* ──────────────────────────────────────────
+          MOBILE: FULL-SCREEN OVERLAY
+      ────────────────────────────────────────── */}
+      <div
+        className="fixed inset-0 z-40 md:hidden flex flex-col items-center justify-center transition-all duration-300"
+        style={{
+          background: "oklch(0.09 0.015 240 / 0.97)",
+          backdropFilter: "blur(24px)",
+          WebkitBackdropFilter: "blur(24px)",
+          opacity: menuOpen ? 1 : 0,
+          pointerEvents: menuOpen ? "auto" : "none",
+        }}
+      >
+        {/* Decorative radial glow in center */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              "radial-gradient(ellipse 60% 50% at 50% 50%, var(--px-10), transparent)",
+          }}
+        />
+
+        {/* Profile */}
+        <div
+          className="mb-10 flex flex-col items-center gap-2 relative z-10 transition-all duration-400"
+          style={{
+            transitionDelay: menuOpen ? "60ms" : "0ms",
+            opacity: menuOpen ? 1 : 0,
+            transform: menuOpen ? "translateY(0)" : "translateY(16px)",
+          }}
+        >
+          <div
+            className="w-16 h-16 rounded-full overflow-hidden"
+            style={{
+              border: "2px solid var(--px-50)",
+              boxShadow: "0 0 20px var(--px-30)",
+            }}
+          >
+            <img
+              src="/images/profile.jpg"
+              alt="Chuck"
+              className="w-full h-full object-cover"
+            />
+          </div>
+          <span className="text-sm font-bold gradient-text">chuck.support</span>
+        </div>
+
+        {/* Nav links — staggered fade-up */}
+        <nav className="flex flex-col items-center gap-1 relative z-10">
+          {navLinks.map(({ href, label }, i) => {
+            const active = pathname === href;
+            return (
+              <Link
+                key={href}
+                href={href}
+                onClick={() => setMenuOpen(false)}
+                className="text-4xl font-black tracking-tight py-1 px-6 rounded-xl transition-all duration-300"
+                style={{
+                  transitionDelay: menuOpen ? `${(i + 1) * 55}ms` : "0ms",
+                  opacity: menuOpen ? 1 : 0,
+                  transform: menuOpen ? "translateY(0)" : "translateY(20px)",
+                  color: active ? "var(--primary)" : "oklch(0.94 0.005 220 / 0.8)",
+                  textShadow: active ? "0 0 30px var(--px-40)" : "none",
+                }}
+                onMouseEnter={(e) => {
+                  if (!active)
+                    (e.currentTarget as HTMLAnchorElement).style.color =
+                      "oklch(0.94 0.005 220)";
+                }}
+                onMouseLeave={(e) => {
+                  if (!active)
+                    (e.currentTarget as HTMLAnchorElement).style.color =
+                      "oklch(0.94 0.005 220 / 0.8)";
+                }}
+              >
+                {label}
+              </Link>
+            );
+          })}
+        </nav>
+      </div>
     </>
   );
 }
