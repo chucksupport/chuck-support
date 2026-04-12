@@ -54,9 +54,12 @@ export function Sidebar() {
       >
         {/* Profile area */}
         <div className="flex flex-col items-center gap-3 px-4 py-6">
-          <div className="w-24 h-24 rounded-full bg-muted border-2 border-primary/40 flex items-center justify-center overflow-hidden">
-            {/* Replace src with actual profile photo */}
-            <span className="text-4xl select-none">🤙</span>
+          <div className="w-24 h-24 rounded-full border-2 border-primary/40 overflow-hidden">
+            <img
+              src="/images/profile.jpg"
+              alt="Chuck"
+              className="w-full h-full object-cover"
+            />
           </div>
           <div className="text-center">
             <p className="font-semibold text-sidebar-foreground text-sm">Chuck Support</p>

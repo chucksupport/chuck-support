@@ -53,16 +53,13 @@ export default function HomePage() {
         </p>
         <div className="relative w-full aspect-video rounded-xl overflow-hidden border border-border bg-muted">
           <iframe
-            src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+            src="https://www.youtube.com/embed/3A350q6LUIk"
             title="The Endo Project by Jordan P. Anderson"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
             className="absolute inset-0 w-full h-full"
           />
         </div>
-        <p className="text-xs text-muted-foreground">
-          * Replace the YouTube embed URL above with the correct Endo Project video link.
-        </p>
       </section>
 
       <Separator className="bg-border" />
