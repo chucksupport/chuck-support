@@ -43,26 +43,4 @@ export const products: Product[] = [
     category: "Support",
     emoji: "💙",
   },
-  {
-    id: "website-build",
-    name: "Website Build",
-    description:
-      "Full website construction from scratch. Design, development, and launch. Let's build something great.",
-    price: 50000,
-    priceDisplay: "$500.00",
-    stripePriceId: process.env.STRIPE_PRICE_WEBSITE_BUILD ?? "price_website_build",
-    category: "Services",
-    emoji: "🏗️",
-  },
-  {
-    id: "data-migration",
-    name: "Data Migration",
-    description:
-      "Safe, clean migration of your data from old systems to new ones. Zero data left behind.",
-    price: 15000,
-    priceDisplay: "$150.00",
-    stripePriceId: process.env.STRIPE_PRICE_DATA_MIGRATION ?? "price_data_migration",
-    category: "Services",
-    emoji: "📦",
-  },
 ];

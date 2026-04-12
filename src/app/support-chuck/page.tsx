@@ -1,108 +1,77 @@
-import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { buttonVariants } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import Link from "next/link";
-import { cn } from "@/lib/utils";
 
-const ways = [
+const donationMethods = [
   {
-    icon: "💳",
-    title: "Buy a Service",
-    desc: "The most direct way to support Chuck is to hire Chuck. Head to the Buy Support page and grab something from the catalog.",
-    action: { label: "Browse Services", href: "/buy-support" },
+    icon: "💸",
+    name: "Venmo",
+    handle: "@chucksupport",
+    url: "https://venmo.com/chucksupport",
+    color: "bg-[#3d95ce]",
   },
   {
-    icon: "🌯",
-    title: "Buy a Chuckurrito",
-    desc: "For just $10, you can fund a legendary hand-crafted burrito and put a smile on Chuck's face.",
-    action: { label: "Get a Chuckurrito", href: "/chuckurrito" },
+    icon: "💵",
+    name: "Cash App",
+    handle: "$chucksupport",
+    url: "https://cash.app/$chucksupport",
+    color: "bg-[#00d632]",
   },
   {
-    icon: "💙",
-    title: "Hour of Moral Support",
-    desc: "Pay what you can for an hour of honest conversation, encouragement, and problem-solving with Chuck.",
-    action: { label: "Book a Session", href: "/buy-support" },
-  },
-  {
-    icon: "📣",
-    title: "Spread the Word",
-    desc: "Know someone who needs a website, a network fixed, or audio recorded? Send them to chuck.support. Word of mouth is the best marketing.",
-    action: null,
-  },
-  {
-    icon: "⭐",
-    title: "Leave a Review",
-    desc: "Had a good experience? Tell someone. Online reviews, social posts, and referrals all help more than you might think.",
-    action: null,
-  },
-  {
-    icon: "🤝",
-    title: "Collaborate",
-    desc: "Have a project where Chuck's skills could be useful? Chuck is open to partnerships, collabs, and interesting work. Reach out.",
-    action: { label: "Get in Touch", href: "/help" },
+    icon: "🅿️",
+    name: "PayPal",
+    handle: "paypal.me/chucksupport",
+    url: "https://paypal.me/chucksupport",
+    color: "bg-[#003087]",
   },
 ];
 
 export default function SupportChuckPage() {
   return (
-    <div className="flex flex-col gap-8 px-6 py-10 max-w-4xl">
+    <div className="flex flex-col gap-8 px-6 py-10 max-w-2xl">
       <section className="flex flex-col gap-3">
         <div className="flex items-center gap-3 flex-wrap">
           <h1 className="text-2xl font-bold text-foreground">Support Chuck</h1>
           <Badge className="bg-primary/20 text-primary border border-primary/30 text-xs">
-            Keep the lights on
+            Donations
           </Badge>
         </div>
-        <p className="text-muted-foreground text-base leading-relaxed max-w-2xl">
-          Chuck Support runs lean — one person, many skills, a lot of heart.
-          If this work has helped you, or if you just believe in what Chuck is
-          building, here are some ways to show your support.
-        </p>
-        <p className="text-muted-foreground text-base leading-relaxed max-w-2xl">
-          Everything here — the hosting, the skills, the time — is Chuck&apos;s
-          own. Your support keeps it going and makes room for more good work.
+        <p className="text-muted-foreground text-base leading-relaxed">
+          If Chuck has helped you out or you just want to show some love, any
+          amount is appreciated. Choose your preferred platform below.
         </p>
       </section>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {ways.map(({ icon, title, desc, action }) => (
-          <Card key={title} className="bg-card border-border hover:border-primary/40 transition-colors flex flex-col">
-            <CardContent className="pt-5 pb-5 px-5 flex flex-col gap-3 flex-1">
-              <span className="text-3xl">{icon}</span>
-              <div className="flex flex-col gap-1 flex-1">
-                <h3 className="font-semibold text-card-foreground">{title}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{desc}</p>
-              </div>
-              {action && (
-                <Link
-                  href={action.href}
-                  className={cn(
-                    buttonVariants({ size: "sm" }),
-                    "w-fit bg-primary text-primary-foreground hover:bg-primary/90 mt-auto"
-                  )}
-                >
-                  {action.label} →
-                </Link>
-              )}
-            </CardContent>
-          </Card>
+      <div className="flex flex-col gap-4">
+        {donationMethods.map(({ icon, name, handle, url, color }) => (
+          <a
+            key={name}
+            href={url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-4 rounded-xl border border-border bg-card px-5 py-4 hover:border-primary/40 transition-colors group"
+          >
+            <div className={`w-12 h-12 rounded-xl ${color} flex items-center justify-center text-2xl shrink-0`}>
+              {icon}
+            </div>
+            <div className="flex flex-col gap-0.5 flex-1">
+              <span className="font-semibold text-card-foreground">{name}</span>
+              <span className="text-sm text-muted-foreground font-mono">{handle}</span>
+            </div>
+            <span className="text-muted-foreground group-hover:text-primary transition-colors text-lg">→</span>
+          </a>
         ))}
       </div>
 
       <Separator className="bg-border" />
 
-      <section className="flex flex-col gap-3 pb-10">
-        <h2 className="text-lg font-semibold text-foreground">Thank You</h2>
-        <p className="text-sm text-muted-foreground max-w-xl leading-relaxed">
-          Seriously. Whether you buy something, refer someone, or just visited
-          this site and thought &ldquo;this seems legit&rdquo; — it all matters.
-          Chuck appreciates every bit of it.
-        </p>
-        <Link href="/" className={cn(buttonVariants({ variant: "outline" }), "w-fit")}>
-          Back to Home
-        </Link>
-      </section>
+      <p className="text-sm text-muted-foreground leading-relaxed pb-6">
+        Thank you. Every bit helps keep Chuck Support running.
+        If you&apos;d rather pay for a specific service, head to the{" "}
+        <a href="/buy-support" className="text-primary underline underline-offset-2">
+          Buy Support
+        </a>{" "}
+        page.
+      </p>
     </div>
   );
 }

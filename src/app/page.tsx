@@ -46,21 +46,15 @@ export default function HomePage() {
       <Separator className="bg-border" />
 
       {/* YouTube embed */}
-      <section className="flex flex-col gap-3">
-        <h2 className="text-lg font-semibold text-foreground">Featured: The Endo Project</h2>
-        <p className="text-sm text-muted-foreground">
-          Music by Jordan P. Anderson — a project Chuck is proud to support.
-        </p>
-        <div className="relative w-full aspect-video rounded-xl overflow-hidden border border-border bg-muted">
-          <iframe
-            src="https://www.youtube.com/embed/3A350q6LUIk"
-            title="The Endo Project by Jordan P. Anderson"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-            className="absolute inset-0 w-full h-full"
-          />
-        </div>
-      </section>
+      <div className="relative w-full aspect-video rounded-xl overflow-hidden border border-border bg-muted">
+        <iframe
+          src="https://www.youtube.com/embed/3A350q6LUIk"
+          title="The Endo Project by Jordan P. Anderson"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+          className="absolute inset-0 w-full h-full"
+        />
+      </div>
 
       <Separator className="bg-border" />
 
