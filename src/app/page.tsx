@@ -1,65 +1,108 @@
-import Image from "next/image";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 
-export default function Home() {
+const services = [
+  { icon: "🌐", title: "Website Construction", desc: "From landing pages to full-stack apps — designed, built, and launched." },
+  { icon: "📦", title: "Data Migrations", desc: "Move your data safely between platforms, databases, and systems." },
+  { icon: "🔌", title: "Networking", desc: "Home and small-business network setup, configuration, and troubleshooting." },
+  { icon: "🖥️", title: "Hosting", desc: "Reliable managed hosting on modern infrastructure. No surprises." },
+  { icon: "💻", title: "Programming", desc: "Custom software solutions — automation, scripts, APIs, and more." },
+  { icon: "🎙️", title: "Audio Recording", desc: "Professional-grade recording, mixing, and production in a creative environment." },
+  { icon: "⛓️", title: "Blockchain & Crypto", desc: "Web3 development, wallet integrations, smart contracts, and crypto consulting." },
+  { icon: "☀️", title: "Renewable Energy", desc: "Solar, battery storage, and off-grid power consulting for homes and builds." },
+  { icon: "🏗️", title: "Sustainable Building", desc: "Eco-conscious construction consulting — materials, design, and systems." },
+];
+
+export default function HomePage() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
+    <div className="flex flex-col gap-10 px-6 py-10 max-w-4xl">
+      {/* Hero */}
+      <section className="flex flex-col gap-4">
+        <div className="flex items-center gap-3 flex-wrap">
+          <h1 className="text-3xl font-bold tracking-tight text-foreground">
+            Chuck Support
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+          <Badge className="bg-primary/20 text-primary border border-primary/30 text-xs">
+            Full-Service Digital Agency
+          </Badge>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+        <p className="text-muted-foreground text-base leading-relaxed max-w-2xl">
+          Welcome to Chuck Support — where technology meets craftsmanship.
+          Whether you need a website built from scratch, your data moved safely
+          to a new home, a network that actually works, or a custom piece of
+          software that solves a real problem: this is the place.
+        </p>
+
+        <p className="text-muted-foreground text-base leading-relaxed max-w-2xl">
+          Chuck Support is a one-person agency with zero bureaucracy, deep
+          technical chops, and a genuine commitment to doing the job right.
+          From the first conversation to the final deploy — you work directly
+          with Chuck.
+        </p>
+      </section>
+
+      <Separator className="bg-border" />
+
+      {/* YouTube embed */}
+      <section className="flex flex-col gap-3">
+        <h2 className="text-lg font-semibold text-foreground">Featured: The Endo Project</h2>
+        <p className="text-sm text-muted-foreground">
+          Music by Jordan P. Anderson — a project Chuck is proud to support.
+        </p>
+        <div className="relative w-full aspect-video rounded-xl overflow-hidden border border-border bg-muted">
+          <iframe
+            src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+            title="The Endo Project by Jordan P. Anderson"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            className="absolute inset-0 w-full h-full"
+          />
         </div>
-      </main>
+        <p className="text-xs text-muted-foreground">
+          * Replace the YouTube embed URL above with the correct Endo Project video link.
+        </p>
+      </section>
+
+      <Separator className="bg-border" />
+
+      {/* Services grid */}
+      <section className="flex flex-col gap-5">
+        <h2 className="text-xl font-semibold text-foreground">What We Do</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {services.map(({ icon, title, desc }) => (
+            <Card
+              key={title}
+              className="bg-card border-border hover:border-primary/40 transition-colors"
+            >
+              <CardContent className="pt-5 pb-5 px-5 flex flex-col gap-2">
+                <span className="text-2xl">{icon}</span>
+                <h3 className="font-semibold text-sm text-card-foreground">{title}</h3>
+                <p className="text-xs text-muted-foreground leading-relaxed">{desc}</p>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </section>
+
+      <Separator className="bg-border" />
+
+      {/* CTA */}
+      <section className="flex flex-col gap-3 pb-10">
+        <h2 className="text-lg font-semibold text-foreground">Ready to get started?</h2>
+        <p className="text-sm text-muted-foreground max-w-xl">
+          Head to the{" "}
+          <a href="/buy-support" className="text-primary underline underline-offset-2">
+            Buy Support
+          </a>{" "}
+          page to browse services, or visit the{" "}
+          <a href="/help" className="text-primary underline underline-offset-2">
+            Help
+          </a>{" "}
+          page to get in touch.
+        </p>
+      </section>
     </div>
   );
 }

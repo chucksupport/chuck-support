@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: chuck-support
+    runtime: node
+    region: oregon
+    plan: free
+    buildCommand: npm ci && npm run build
+    startCommand: npm start
+    healthCheckPath: /
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NODE_VERSION
+        value: 22
+      # Stripe keys — set these in the Render dashboard, not here
+      - key: STRIPE_SECRET_KEY
+        sync: false
+      - key: NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+        sync: false
+      - key: STRIPE_PRICE_CHUCKURRITO
+        sync: false
+      - key: STRIPE_PRICE_HOSTING_1MO
+        sync: false
+      - key: STRIPE_PRICE_MORAL_SUPPORT
+        sync: false
+      - key: STRIPE_PRICE_WEBSITE_BUILD
+        sync: false
+      - key: STRIPE_PRICE_DATA_MIGRATION
+        sync: false
