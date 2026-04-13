@@ -33,6 +33,17 @@ export const products: Product[] = [
     emoji: "🖥️",
   },
   {
+    id: "support-1hr",
+    name: "1 Hour of Support",
+    description:
+      "One hour of hands-on tech support from Chuck. Troubleshooting, setup, debugging, consulting — whatever you need.",
+    price: 10000,
+    priceDisplay: "$100.00",
+    stripePriceId: process.env.STRIPE_PRICE_SUPPORT_1HR ?? "price_support_1hr",
+    category: "Support",
+    emoji: "🛠️",
+  },
+  {
     id: "moral-support-1hr",
     name: "Hour of Moral Support",
     description:
