@@ -161,7 +161,7 @@ export function Sidebar() {
       ────────────────────────────────────────── */}
       <button
         onClick={() => setMenuOpen((v) => !v)}
-        className={`fixed top-4 right-4 z-50 md:hidden h-12 px-5 rounded-full flex items-center justify-center transition-all duration-300 overflow-hidden${
+        className={`fixed top-4 right-4 z-50 md:hidden h-12 min-w-[5.5rem] px-5 rounded-full transition-all duration-300 overflow-hidden${
           menuOpen ? "" : " hud-pulse"
         }`}
         style={{
@@ -181,7 +181,7 @@ export function Sidebar() {
       >
         {/* "menu" label — visible when closed */}
         <span
-          className="absolute font-bold tracking-wide text-sm lowercase transition-opacity duration-200 select-none"
+          className="absolute inset-0 flex items-center justify-center font-bold tracking-wide text-sm lowercase transition-opacity duration-200 select-none"
           style={{
             color: "oklch(0.08 0 0)",
             opacity: menuOpen ? 0 : 1,
@@ -191,7 +191,7 @@ export function Sidebar() {
         </span>
         {/* "close" label — visible when open */}
         <span
-          className="absolute font-bold tracking-wide text-sm lowercase transition-opacity duration-200 select-none"
+          className="absolute inset-0 flex items-center justify-center font-bold tracking-wide text-sm lowercase transition-opacity duration-200 select-none"
           style={{
             color: "var(--primary)",
             opacity: menuOpen ? 1 : 0,
