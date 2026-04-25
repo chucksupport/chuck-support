@@ -78,6 +78,18 @@ function ServiceCard({
       {/* Animated conic-gradient border — visible on hover */}
       <div className="service-card__border pointer-events-none absolute inset-0 rounded-xl" />
 
+      {/* Scanning sweep — thin cyan line that periodically traces top→bottom */}
+      <div
+        className="service-card__sweep pointer-events-none absolute inset-0 rounded-xl"
+        style={{ animationDelay: `${(index % 6) * 0.9}s` }}
+      />
+
+      {/* Corner brackets — HUD frame */}
+      <span className="service-card__bracket service-card__bracket--tl" />
+      <span className="service-card__bracket service-card__bracket--tr" />
+      <span className="service-card__bracket service-card__bracket--bl" />
+      <span className="service-card__bracket service-card__bracket--br" />
+
       <div className="relative flex flex-col gap-2 px-5 py-5">
         <div className="service-card__icon relative inline-flex h-10 w-10 items-center justify-center rounded-lg">
           <Icon

@@ -161,7 +161,9 @@ export function Sidebar() {
       ────────────────────────────────────────── */}
       <button
         onClick={() => setMenuOpen((v) => !v)}
-        className="fixed top-4 right-4 z-50 md:hidden h-12 px-5 rounded-full flex items-center justify-center transition-all duration-300 overflow-hidden"
+        className={`fixed top-4 right-4 z-50 md:hidden h-12 px-5 rounded-full flex items-center justify-center transition-all duration-300 overflow-hidden${
+          menuOpen ? "" : " hud-pulse"
+        }`}
         style={{
           background: menuOpen
             ? "oklch(0.13 0.018 240 / 0.9)"
@@ -171,7 +173,7 @@ export function Sidebar() {
             : "1.5px solid transparent",
           boxShadow: menuOpen
             ? "0 0 24px var(--px-30)"
-            : "0 0 28px var(--px-50), 0 4px 16px oklch(0 0 0 / 0.4)",
+            : undefined,
           backdropFilter: menuOpen ? "blur(12px)" : "none",
         }}
         aria-label={menuOpen ? "Close navigation" : "Open navigation"}

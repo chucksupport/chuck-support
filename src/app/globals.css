@@ -318,3 +318,204 @@
   initial-value: 0deg;
   inherits: false;
 }
+
+/* ════════════════════════════════════════════════════════════════
+   HUD aesthetic — boot sequence, holo grid, scan sweep, arc pulse
+   ════════════════════════════════════════════════════════════════ */
+
+/* Main content must sit above the fixed holo-grid layer */
+.hud-content {
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Holographic grid background — fixed, behind everything ── */
+.hud-grid {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(to right,  oklch(0.82 0.21 195 / 0.07) 1px, transparent 1px),
+    linear-gradient(to bottom, oklch(0.82 0.21 195 / 0.07) 1px, transparent 1px);
+  background-size: 32px 32px;
+  -webkit-mask-image: radial-gradient(
+    ellipse 80% 70% at 50% 40%,
+    #000 0%,
+    rgba(0, 0, 0, 0.55) 55%,
+    transparent 100%
+  );
+          mask-image: radial-gradient(
+    ellipse 80% 70% at 50% 40%,
+    #000 0%,
+    rgba(0, 0, 0, 0.55) 55%,
+    transparent 100%
+  );
+  opacity: 0.85;
+}
+
+/* ── Arc-reactor ambient pulse for primary CTAs ── */
+.hud-pulse {
+  position: relative;
+  animation: hud-pulse-glow 3s ease-in-out infinite;
+}
+@keyframes hud-pulse-glow {
+  0%, 100% {
+    box-shadow:
+      0 0 18px oklch(0.82 0.21 195 / 0.35),
+      0 4px 14px oklch(0 0 0 / 0.4);
+  }
+  50% {
+    box-shadow:
+      0 0 32px oklch(0.82 0.21 195 / 0.65),
+      0 0 64px oklch(0.82 0.21 195 / 0.18),
+      0 4px 18px oklch(0 0 0 / 0.45);
+  }
+}
+
+/* ── Boot sequence overlay ── */
+.boot-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+  display: none;
+}
+[data-boot="active"] .boot-overlay {
+  display: block;
+}
+
+/* Edge lines that draw in along top + sides */
+.boot-line {
+  position: absolute;
+  background: oklch(0.82 0.21 195 / 0.85);
+  box-shadow: 0 0 8px oklch(0.82 0.21 195 / 0.6);
+  opacity: 0;
+}
+.boot-line--top {
+  top: 0;  left: 0;  right: 0;  height: 1px;
+  transform-origin: left center;
+  animation: boot-line-x 600ms cubic-bezier(0.22, 1, 0.36, 1) 0ms forwards;
+}
+.boot-line--bottom {
+  bottom: 0;  left: 0;  right: 0;  height: 1px;
+  transform-origin: right center;
+  animation: boot-line-x 600ms cubic-bezier(0.22, 1, 0.36, 1) 100ms forwards;
+}
+.boot-line--left {
+  top: 0;  bottom: 0;  left: 0;  width: 1px;
+  transform-origin: center top;
+  animation: boot-line-y 600ms cubic-bezier(0.22, 1, 0.36, 1) 80ms forwards;
+}
+.boot-line--right {
+  top: 0;  bottom: 0;  right: 0;  width: 1px;
+  transform-origin: center bottom;
+  animation: boot-line-y 600ms cubic-bezier(0.22, 1, 0.36, 1) 60ms forwards;
+}
+@keyframes boot-line-x {
+  0%   { opacity: 0; transform: scaleX(0); }
+  20%  { opacity: 1; }
+  100% { opacity: 0; transform: scaleX(1); }
+}
+@keyframes boot-line-y {
+  0%   { opacity: 0; transform: scaleY(0); }
+  20%  { opacity: 1; }
+  100% { opacity: 0; transform: scaleY(1); }
+}
+
+/* Corner brackets that snap in at the four screen corners */
+.boot-bracket {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  border: 1.5px solid oklch(0.82 0.21 195);
+  filter: drop-shadow(0 0 6px oklch(0.82 0.21 195 / 0.7));
+  opacity: 0;
+}
+.boot-bracket--tl { top: 14px;    left: 14px;   border-right: 0; border-bottom: 0; animation: boot-bracket-in 300ms ease-out 500ms forwards; }
+.boot-bracket--tr { top: 14px;    right: 14px;  border-left: 0;  border-bottom: 0; animation: boot-bracket-in 300ms ease-out 600ms forwards; }
+.boot-bracket--bl { bottom: 14px; left: 14px;   border-right: 0; border-top: 0;    animation: boot-bracket-in 300ms ease-out 700ms forwards; }
+.boot-bracket--br { bottom: 14px; right: 14px;  border-left: 0;  border-top: 0;    animation: boot-bracket-in 300ms ease-out 800ms forwards; }
+@keyframes boot-bracket-in {
+  0%   { opacity: 0; transform: scale(0.4); }
+  60%  { opacity: 1; transform: scale(1.08); }
+  100% { opacity: 0; transform: scale(1); }
+}
+
+/* Hide main content while booting; fade up after lines+brackets land */
+[data-boot="active"] .hud-content {
+  opacity: 0;
+  transform: translateY(8px);
+  animation: hud-content-in 500ms cubic-bezier(0.22, 1, 0.36, 1) 700ms forwards;
+}
+@keyframes hud-content-in {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Service card: corner brackets + scanning sweep (additive to existing) ── */
+.service-card__bracket {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-color: oklch(0.82 0.21 var(--hue) / 0.35);
+  border-style: solid;
+  border-width: 0;
+  opacity: 1;
+  pointer-events: none;
+  transition:
+    width 300ms cubic-bezier(0.22, 1, 0.36, 1),
+    height 300ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 300ms ease-out;
+}
+.service-card__bracket--tl { top: 6px;    left: 6px;    border-top-width: 1px; border-left-width: 1px; }
+.service-card__bracket--tr { top: 6px;    right: 6px;   border-top-width: 1px; border-right-width: 1px; }
+.service-card__bracket--bl { bottom: 6px; left: 6px;    border-bottom-width: 1px; border-left-width: 1px; }
+.service-card__bracket--br { bottom: 6px; right: 6px;   border-bottom-width: 1px; border-right-width: 1px; }
+@media (hover: hover) {
+  .service-card:hover .service-card__bracket {
+    width: 10px;
+    height: 10px;
+    border-color: oklch(0.82 0.21 var(--hue) / 1);
+  }
+}
+
+.service-card__sweep {
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    transparent 48%,
+    oklch(0.82 0.21 var(--hue) / 0.45) 50%,
+    transparent 52%,
+    transparent 100%
+  );
+  background-size: 100% 280%;
+  background-repeat: no-repeat;
+  background-position: 0 -100%;
+  opacity: 0.6;
+  mix-blend-mode: screen;
+  animation: service-card-sweep 5s linear infinite;
+}
+@keyframes service-card-sweep {
+  0%   { background-position: 0 -100%; }
+  60%  { background-position: 0 200%; }
+  100% { background-position: 0 200%; }
+}
+
+/* ── Reduced-motion: kill all HUD animations, keep static states ── */
+@media (prefers-reduced-motion: reduce) {
+  .hud-pulse {
+    animation: none;
+    box-shadow: 0 0 18px oklch(0.82 0.21 195 / 0.35);
+  }
+  .boot-line,
+  .boot-bracket,
+  [data-boot="active"] .hud-content {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .service-card__sweep {
+    animation: none;
+    opacity: 0;
+  }
+}

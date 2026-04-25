@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Sidebar } from "@/components/Sidebar";
+import { BootSequence } from "@/components/BootSequence";
 import { CartProvider } from "@/contexts/CartContext";
 
 const inter = Inter({
@@ -40,9 +41,11 @@ export default function RootLayout({
       className={`${inter.variable} ${geistMono.variable} dark antialiased`}
     >
       <body className="min-h-screen flex bg-background text-foreground">
+        <div className="hud-grid" aria-hidden />
+        <BootSequence />
         <CartProvider>
           <Sidebar />
-          <main className="flex-1 min-w-0 flex flex-col pt-16 md:pt-0">
+          <main className="hud-content flex-1 min-w-0 flex flex-col pt-16 md:pt-0">
             {children}
           </main>
         </CartProvider>
