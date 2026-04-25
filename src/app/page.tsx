@@ -78,7 +78,7 @@ export default function HomePage() {
 
       <Separator style={{ background: "oklch(1 0 0 / 0.06)" }} />
 
-      {/* ── YOUTUBE EMBED ── */}
+      {/* ── FEATURED FILM ── */}
       <div className="relative">
         {/* Outer glow halo */}
         <div
@@ -90,21 +90,29 @@ export default function HomePage() {
           }}
         />
         <div
-          className="relative w-full aspect-video rounded-xl overflow-hidden"
+          className="relative w-full aspect-video rounded-xl overflow-hidden bg-black"
           style={{
             border: "1px solid oklch(0.82 0.21 195 / 0.25)",
             boxShadow:
               "0 0 48px oklch(0.82 0.21 195 / 0.07), 0 24px 64px oklch(0 0 0 / 0.5)",
           }}
         >
-          <iframe
-            src="https://www.youtube.com/embed/3A350q6LUIk"
-            title="The Endo Project by Jordan P. Anderson"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-            className="absolute inset-0 w-full h-full"
+          <video
+            src="/videos/endo-project.mp4"
+            poster="/videos/endo-project-poster.jpg"
+            controls
+            preload="metadata"
+            playsInline
+            title="The Endo Project — directed by Jordan P. Anderson"
+            className="absolute inset-0 w-full h-full object-cover"
           />
         </div>
+        <p
+          className="mt-3 text-xs tracking-wide text-center"
+          style={{ color: "oklch(0.60 0.012 230)" }}
+        >
+          The Endo Project — a short film by Jordan P. Anderson, starring Chuck.
+        </p>
       </div>
 
       <Separator style={{ background: "oklch(1 0 0 / 0.06)" }} />

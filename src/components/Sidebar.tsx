@@ -157,11 +157,11 @@ export function Sidebar() {
       </aside>
 
       {/* ──────────────────────────────────────────
-          MOBILE: FLOATING CS BUTTON
+          MOBILE: FLOATING MENU BUTTON
       ────────────────────────────────────────── */}
       <button
         onClick={() => setMenuOpen((v) => !v)}
-        className="fixed top-4 right-4 z-50 md:hidden w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 overflow-hidden"
+        className="fixed top-4 right-4 z-50 md:hidden h-12 px-5 rounded-full flex items-center justify-center transition-all duration-300 overflow-hidden"
         style={{
           background: menuOpen
             ? "oklch(0.13 0.018 240 / 0.9)"
@@ -174,29 +174,28 @@ export function Sidebar() {
             : "0 0 28px var(--px-50), 0 4px 16px oklch(0 0 0 / 0.4)",
           backdropFilter: menuOpen ? "blur(12px)" : "none",
         }}
-        aria-label="Toggle navigation"
+        aria-label={menuOpen ? "Close navigation" : "Open navigation"}
+        aria-expanded={menuOpen}
       >
-        {/* "CS" label — visible when closed */}
+        {/* "menu" label — visible when closed */}
         <span
-          className="absolute font-black tracking-tight text-xs transition-all duration-300 select-none"
+          className="absolute font-bold tracking-wide text-sm lowercase transition-opacity duration-200 select-none"
           style={{
-            color: menuOpen ? "var(--primary)" : "oklch(0.08 0 0)",
+            color: "oklch(0.08 0 0)",
             opacity: menuOpen ? 0 : 1,
-            transform: menuOpen ? "scale(0.5) rotate(90deg)" : "scale(1) rotate(0deg)",
           }}
         >
-          CS
+          menu
         </span>
-        {/* "×" — visible when open */}
+        {/* "close" label — visible when open */}
         <span
-          className="absolute text-2xl leading-none font-light transition-all duration-300 select-none"
+          className="absolute font-bold tracking-wide text-sm lowercase transition-opacity duration-200 select-none"
           style={{
             color: "var(--primary)",
             opacity: menuOpen ? 1 : 0,
-            transform: menuOpen ? "scale(1) rotate(0deg)" : "scale(0.5) rotate(-90deg)",
           }}
         >
-          ×
+          close
         </span>
       </button>
 

@@ -23,7 +23,7 @@ A modern Next.js website replacing the previous WordPress installation. Built wi
 
 | Route | Description |
 |-------|-------------|
-| `/` | Homepage — services overview, YouTube embed, hero |
+| `/` | Homepage — services overview, featured film, hero |
 | `/buy-support` | Product catalog with Stripe checkout |
 | `/karaoke-dj` | Karaoke and DJ events page |
 | `/chuckurrito` | The legendary Chuckurrito |
@@ -80,7 +80,7 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ## Customization Checklist
 
-- [ ] Replace YouTube embed URL in `src/app/page.tsx` (search for `dQw4w9WgXcQ`)
+- [ ] Swap featured film — replace `public/videos/endo-project.mp4` and `endo-project-poster.jpg`, update `<video>` in `src/app/page.tsx`
 - [ ] Add a real profile photo — update `src/components/Sidebar.tsx` (look for the emoji placeholder)
 - [ ] Set real Stripe price IDs in `.env.local` / Render env vars
 - [ ] Update contact email in `src/app/help/page.tsx` if needed
