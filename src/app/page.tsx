@@ -1,17 +1,5 @@
-import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-
-const services = [
-  { icon: "🌐", title: "Website Construction",  desc: "From landing pages to full-stack apps — designed, built, and launched." },
-  { icon: "📦", title: "Data Migrations",        desc: "Move your data safely between platforms, databases, and systems." },
-  { icon: "🔌", title: "Networking",             desc: "Home and small-business network setup, configuration, and troubleshooting." },
-  { icon: "🖥️", title: "Hosting",               desc: "Reliable managed hosting on modern infrastructure. No surprises." },
-  { icon: "💻", title: "Programming",            desc: "Custom software solutions — automation, scripts, APIs, and more." },
-  { icon: "🎙️", title: "Audio Recording",        desc: "Professional-grade recording, mixing, and production in a creative environment." },
-  { icon: "⛓️", title: "Blockchain & Crypto",    desc: "Web3 development, wallet integrations, smart contracts, and crypto consulting." },
-  { icon: "☀️", title: "Renewable Energy",       desc: "Solar, battery storage, and off-grid power consulting for homes and builds." },
-  { icon: "🏗️", title: "Sustainable Building",  desc: "Eco-conscious construction consulting — materials, design, and systems." },
-];
+import { ServicesGrid } from "@/components/ServicesGrid";
 
 export default function HomePage() {
   return (
@@ -131,31 +119,7 @@ export default function HomePage() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-          {services.map(({ icon, title, desc }) => (
-            <Card
-              key={title}
-              className="service-card"
-              style={{ background: "oklch(0.13 0.018 240)" }}
-            >
-              <CardContent className="pt-5 pb-5 px-5 flex flex-col gap-2">
-                <span className="text-2xl">{icon}</span>
-                <h3
-                  className="font-bold text-sm tracking-tight"
-                  style={{ color: "oklch(0.94 0.005 220)" }}
-                >
-                  {title}
-                </h3>
-                <p
-                  className="text-xs leading-relaxed"
-                  style={{ color: "oklch(0.60 0.012 230)" }}
-                >
-                  {desc}
-                </p>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+        <ServicesGrid />
       </section>
 
       <Separator style={{ background: "oklch(1 0 0 / 0.06)" }} />
