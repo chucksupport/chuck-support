@@ -152,7 +152,7 @@ function CartSummary() {
       </div>
       {error && <p className="text-destructive text-sm">{error}</p>}
       <Button
-        className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
+        className="hud-pulse w-full bg-primary text-primary-foreground hover:bg-primary/90"
         onClick={handleCheckout}
         disabled={loading}
       >
