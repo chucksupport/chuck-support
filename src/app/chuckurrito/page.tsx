@@ -35,7 +35,7 @@ const testimonials = [
 
 export default function ChuckurritoPage() {
   return (
-    <div className="flex flex-col gap-8 px-6 py-10 max-w-4xl">
+    <div className="flex flex-col gap-8 px-6 py-10 max-w-4xl w-full mx-auto">
       <section className="flex flex-col gap-3">
         <div className="flex items-center gap-3 flex-wrap">
           <h1 className="text-2xl font-bold text-foreground">

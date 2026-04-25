@@ -3,7 +3,7 @@ import { ServicesGrid } from "@/components/ServicesGrid";
 
 export default function HomePage() {
   return (
-    <div className="flex flex-col gap-12 px-6 py-10 max-w-4xl w-full">
+    <div className="flex flex-col gap-12 px-6 py-10 max-w-4xl w-full mx-auto">
 
       {/* ── HERO ── */}
       <section className="relative overflow-hidden">

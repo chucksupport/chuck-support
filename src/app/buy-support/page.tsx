@@ -170,7 +170,7 @@ function CartSummary() {
 
 export default function BuySupportPage() {
   return (
-    <div className="flex flex-col gap-8 px-6 py-10 max-w-4xl">
+    <div className="flex flex-col gap-8 px-6 py-10 max-w-4xl w-full mx-auto">
       <div>
         <h1 className="text-2xl font-bold text-foreground">Buy Support</h1>
         <p className="text-sm text-muted-foreground mt-1">
