@@ -354,9 +354,12 @@
   opacity: 0.85;
 }
 
-/* ── Arc-reactor ambient pulse for primary CTAs ── */
+/* ── Arc-reactor ambient pulse for primary CTAs ──
+   Note: deliberately NO position rule. Both rules in this file live in the
+   anonymous (top-level) cascade layer, which beats Tailwind utilities like
+   `fixed`. Setting position here would override `fixed` on the mobile menu
+   pill, dropping it back into normal flow. */
 .hud-pulse {
-  position: relative;
   animation: hud-pulse-glow 3s ease-in-out infinite;
 }
 @keyframes hud-pulse-glow {
