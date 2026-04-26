@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { TransitionLink as Link } from "@/components/TransitionLink";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
