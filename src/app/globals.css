@@ -581,37 +581,6 @@
   }
 }
 
-/* ════════════════════════════════════════════════════════════════
-   View transitions — holographic cross-fade between routes
-   (Activated by Next.js experimental.viewTransition flag, which
-   wraps navigations in document.startViewTransition. Browsers
-   without the API just see a normal nav — graceful no-op.)
-   ════════════════════════════════════════════════════════════════ */
-::view-transition-old(root) {
-  animation: hud-fade-out 320ms cubic-bezier(0.4, 0, 0.6, 1) forwards;
-}
-::view-transition-new(root) {
-  animation: hud-fade-in 420ms cubic-bezier(0.22, 1, 0.36, 1) 80ms backwards;
-}
-@keyframes hud-fade-out {
-  to {
-    opacity: 0;
-    filter: blur(2px) brightness(1.15);
-  }
-}
-@keyframes hud-fade-in {
-  from {
-    opacity: 0;
-    filter: blur(3px) brightness(1.1);
-    transform: translateY(4px);
-  }
-  to {
-    opacity: 1;
-    filter: blur(0) brightness(1);
-    transform: translateY(0);
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
   .hud-telemetry__indicator {
     animation: none;
@@ -620,10 +589,5 @@
   .service-card__ripple {
     animation: none;
     display: none;
-  }
-  ::view-transition-old(root),
-  ::view-transition-new(root) {
-    animation-duration: 1ms !important;
-    animation-delay: 0ms !important;
   }
 }
