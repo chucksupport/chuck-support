@@ -161,13 +161,10 @@ export function Sidebar() {
       ────────────────────────────────────────── */}
       <button
         onClick={() => setMenuOpen((v) => !v)}
-        className={`fixed z-50 md:hidden h-12 min-w-[5.5rem] px-5 rounded-full transition-all duration-300 overflow-hidden${
+        className={`fixed top-4 right-4 z-50 md:hidden h-12 min-w-[5.5rem] px-5 rounded-full transition-all duration-300 overflow-hidden${
           menuOpen ? "" : " hud-pulse"
         }`}
         style={{
-          top: "1rem",
-          right: "1rem",
-          left: "auto",
           background: menuOpen
             ? "oklch(0.13 0.018 240 / 0.9)"
             : "var(--primary)",
