@@ -47,6 +47,7 @@ function ServiceCard({
   const ref = useRef<HTMLDivElement | null>(null);
   const hue = HUES[index % HUES.length];
   const { Icon, title, desc } = service;
+  const [ripple, setRipple] = useState<{ id: number; x: number; y: number } | null>(null);
 
   function onMove(e: React.MouseEvent<HTMLDivElement>) {
     const el = ref.current;
@@ -56,10 +57,22 @@ function ServiceCard({
     el.style.setProperty("--my", `${e.clientY - rect.top}px`);
   }
 
+  function onPointerDown(e: React.PointerEvent<HTMLDivElement>) {
+    const el = ref.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    setRipple({
+      id: (ripple?.id ?? 0) + 1,
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+    });
+  }
+
   return (
     <div
       ref={ref}
       onMouseMove={onMove}
+      onPointerDown={onPointerDown}
       className="service-card group relative overflow-hidden rounded-xl"
       style={
         {
@@ -89,6 +102,21 @@ function ServiceCard({
       <span className="service-card__bracket service-card__bracket--tr" />
       <span className="service-card__bracket service-card__bracket--bl" />
       <span className="service-card__bracket service-card__bracket--br" />
+
+      {/* Tap ripple — re-keyed on each press to retrigger animation */}
+      {ripple && (
+        <span
+          key={ripple.id}
+          className="service-card__ripple"
+          style={
+            {
+              "--rx": `${ripple.x}px`,
+              "--ry": `${ripple.y}px`,
+            } as React.CSSProperties
+          }
+          aria-hidden
+        />
+      )}
 
       <div className="relative flex flex-col gap-2 px-5 py-5">
         <div className="service-card__icon relative inline-flex h-10 w-10 items-center justify-center rounded-lg">
