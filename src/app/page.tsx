@@ -1,5 +1,6 @@
 import { Separator } from "@/components/ui/separator";
 import { ServicesGrid } from "@/components/ServicesGrid";
+import { HudTelemetry } from "@/components/HudTelemetry";
 
 export default function HomePage() {
   return (
@@ -61,6 +62,15 @@ export default function HomePage() {
             <a href="/buy-support" className="link-accent">Browse Services →</a>
             <a href="/help" className="link-muted">Get in Touch</a>
           </div>
+
+          {/* Telemetry readout */}
+          <HudTelemetry
+            items={[
+              "STATUS: ONLINE",
+              { kind: "uptime" },
+              { kind: "latency" },
+            ]}
+          />
         </div>
       </section>
 
@@ -117,6 +127,10 @@ export default function HomePage() {
           <p className="text-sm" style={{ color: "oklch(0.60 0.012 230)" }}>
             A wide range of technical and creative services — all under one roof.
           </p>
+          <HudTelemetry
+            className="mt-1"
+            items={["SYS_OPS", "9 MODULES LOADED", "RUNTIME OK"]}
+          />
         </div>
 
         <ServicesGrid />

@@ -522,3 +522,108 @@
     opacity: 0;
   }
 }
+
+/* ════════════════════════════════════════════════════════════════
+   HUD telemetry — small monospace status readouts
+   ════════════════════════════════════════════════════════════════ */
+.hud-telemetry {
+  color: oklch(0.82 0.21 195 / 0.7);
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+}
+.hud-telemetry__indicator {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background: var(--primary);
+  border-radius: 50%;
+  box-shadow: 0 0 6px oklch(0.82 0.21 195 / 0.7);
+  animation: hud-telemetry-blink 2s ease-in-out infinite;
+  flex-shrink: 0;
+}
+.hud-telemetry__sep {
+  color: oklch(0.82 0.21 195 / 0.4);
+  margin: 0 0.15em;
+}
+@keyframes hud-telemetry-blink {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.3; }
+}
+
+/* ════════════════════════════════════════════════════════════════
+   Service card tap ripple — JARVIS-style selection confirm
+   ════════════════════════════════════════════════════════════════ */
+.service-card__ripple {
+  position: absolute;
+  left: var(--rx, 50%);
+  top: var(--ry, 50%);
+  width: 4px;
+  height: 4px;
+  border: 1px solid oklch(0.82 0.21 var(--hue, 195) / 0.85);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  opacity: 1;
+  z-index: 5;
+  animation: service-card-ripple 600ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+@keyframes service-card-ripple {
+  0% {
+    width: 4px;
+    height: 4px;
+    opacity: 1;
+    border-color: oklch(0.82 0.21 var(--hue, 195) / 0.95);
+  }
+  100% {
+    width: 600px;
+    height: 600px;
+    opacity: 0;
+    border-color: oklch(0.82 0.21 var(--hue, 195) / 0);
+  }
+}
+
+/* ════════════════════════════════════════════════════════════════
+   View transitions — holographic cross-fade between routes
+   (Activated by Next.js experimental.viewTransition flag, which
+   wraps navigations in document.startViewTransition. Browsers
+   without the API just see a normal nav — graceful no-op.)
+   ════════════════════════════════════════════════════════════════ */
+::view-transition-old(root) {
+  animation: hud-fade-out 320ms cubic-bezier(0.4, 0, 0.6, 1) forwards;
+}
+::view-transition-new(root) {
+  animation: hud-fade-in 420ms cubic-bezier(0.22, 1, 0.36, 1) 80ms backwards;
+}
+@keyframes hud-fade-out {
+  to {
+    opacity: 0;
+    filter: blur(2px) brightness(1.15);
+  }
+}
+@keyframes hud-fade-in {
+  from {
+    opacity: 0;
+    filter: blur(3px) brightness(1.1);
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0) brightness(1);
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hud-telemetry__indicator {
+    animation: none;
+    opacity: 1;
+  }
+  .service-card__ripple {
+    animation: none;
+    display: none;
+  }
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 1ms !important;
+    animation-delay: 0ms !important;
+  }
+}

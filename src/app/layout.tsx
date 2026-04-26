@@ -3,6 +3,7 @@ import { Inter, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Sidebar } from "@/components/Sidebar";
 import { BootSequence } from "@/components/BootSequence";
+import { HudTelemetry } from "@/components/HudTelemetry";
 import { CartProvider } from "@/contexts/CartContext";
 
 const inter = Inter({
@@ -46,7 +47,16 @@ export default function RootLayout({
         <CartProvider>
           <Sidebar />
           <main className="hud-content flex-1 min-w-0 flex flex-col pt-16 md:pt-0">
-            {children}
+            <div className="flex-1">{children}</div>
+            <footer className="px-6 py-4 mt-auto flex justify-center md:justify-start">
+              <HudTelemetry
+                items={[
+                  "SECURE_CHANNEL",
+                  "ENCRYPTED",
+                  "/v3.2.1",
+                ]}
+              />
+            </footer>
           </main>
         </CartProvider>
       </body>
