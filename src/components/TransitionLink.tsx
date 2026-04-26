@@ -37,7 +37,19 @@ export function TransitionLink({ href, onClick, ...rest }: Props) {
     if (typeof start !== "function") return; // browser without VT support → default Link nav
 
     e.preventDefault();
-    start.call(document, () => router.push(href));
+    // Return a promise so the View Transition API waits for the new
+    // route to actually render before snapshotting the "new" frame.
+    // Without this, App Router's router.push returns synchronously
+    // but the new page commits a tick later — VT captures two
+    // near-identical frames and the dissolve is invisible.
+    start.call(
+      document,
+      () =>
+        new Promise<void>((resolve) => {
+          router.push(href);
+          requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
+        }),
+    );
   }
 
   return <Link href={href} onClick={handleClick} {...rest} />;
