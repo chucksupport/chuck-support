@@ -1,9 +1,8 @@
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { HudPageHeader } from "@/components/HudPageHeader";
+import { HudPanel } from "@/components/HudPanel";
 
 const contactMethods = [
   {
@@ -46,75 +45,89 @@ const faqItems = [
 export default function HelpPage() {
   return (
     <div className="flex flex-col gap-8 px-6 py-10 max-w-4xl w-full mx-auto">
-      <section className="flex flex-col gap-3">
-        <div className="flex items-center gap-3 flex-wrap">
-          <h1 className="text-2xl font-bold text-foreground">Help</h1>
-          <Badge className="bg-primary/20 text-primary border border-primary/30 text-xs">
-            Get in touch
-          </Badge>
-        </div>
-        <p className="text-muted-foreground text-base leading-relaxed max-w-2xl">
-          Have a question, a project idea, or just want to talk through
-          something? Chuck is a real person and responds personally. No bots,
-          no ticket queues.
-        </p>
-      </section>
+      <HudPageHeader
+        code="SEC.06 // COMMS"
+        title="Help"
+        chip="Get in touch"
+        telemetry={["CHANNEL: DIRECT", "HUMAN: CONFIRMED", "BOTS: 0"]}
+      >
+        Have a question, a project idea, or just want to talk through
+        something? Chuck is a real person and responds personally. No bots,
+        no ticket queues.
+      </HudPageHeader>
 
       {/* Contact methods */}
       <div className="flex flex-col gap-4">
-        {contactMethods.map(({ icon, title, desc, value, href, action }) => (
-          <Card key={title} className="bg-card border-border">
-            <CardContent className="pt-5 pb-5 px-5 flex flex-col sm:flex-row sm:items-center gap-4">
+        {contactMethods.map(({ icon, title, desc, value, href, action }, i) => (
+          <HudPanel
+            key={title}
+            label={`COMM_CHANNEL.${String(i + 1).padStart(2, "0")}`}
+            labelRight="ENCRYPTED"
+          >
+            <div className="px-5 pt-3 pb-5 flex flex-col sm:flex-row sm:items-center gap-4">
               <span className="text-3xl">{icon}</span>
               <div className="flex flex-col gap-1 flex-1">
                 <h3 className="font-semibold text-card-foreground">{title}</h3>
                 <p className="text-sm text-muted-foreground">{desc}</p>
                 <p className="text-sm text-primary font-mono">{value}</p>
               </div>
-              <a
-                href={href}
-                className={cn(buttonVariants(), "bg-primary text-primary-foreground hover:bg-primary/90 w-fit")}
-              >
-                {action}
-              </a>
-            </CardContent>
-          </Card>
+              <span className="hud-btn-glow">
+                <a
+                  href={href}
+                  className={cn(
+                    buttonVariants(),
+                    "hud-btn bg-primary text-primary-foreground hover:bg-primary/90 w-fit",
+                  )}
+                >
+                  {action}
+                </a>
+              </span>
+            </div>
+          </HudPanel>
         ))}
       </div>
 
-      <Separator className="bg-border" />
+      <div className="hud-rule" />
 
       {/* FAQ */}
       <section className="flex flex-col gap-5">
-        <h2 className="text-lg font-semibold text-foreground">
+        <h2 className="hud-title text-lg font-semibold text-foreground">
           Frequently Asked Questions
         </h2>
         <div className="flex flex-col gap-5">
-          {faqItems.map(({ q, a }) => (
-            <div key={q} className="flex flex-col gap-1.5">
-              <p className="text-sm font-semibold text-foreground">{q}</p>
-              <p className="text-sm text-muted-foreground leading-relaxed">{a}</p>
+          {faqItems.map(({ q, a }, i) => (
+            <div key={q} className="flex gap-4">
+              <span
+                className="font-mono text-[11px] pt-0.5 shrink-0"
+                style={{ color: "oklch(0.82 0.21 195 / 0.6)" }}
+              >
+                Q.{String(i + 1).padStart(2, "0")}
+              </span>
+              <div className="flex flex-col gap-1.5">
+                <p className="text-sm font-semibold text-foreground">{q}</p>
+                <p className="text-sm text-muted-foreground leading-relaxed">{a}</p>
+              </div>
             </div>
           ))}
         </div>
       </section>
 
-      <Separator className="bg-border" />
+      <div className="hud-rule" />
 
       {/* Quick links */}
       <section className="flex flex-col gap-3 pb-10">
-        <h2 className="text-lg font-semibold text-foreground">Quick Links</h2>
+        <h2 className="hud-title text-lg font-semibold text-foreground">Quick Links</h2>
         <div className="flex flex-wrap gap-3">
-          <Link href="/buy-support" className={buttonVariants({ variant: "outline", size: "sm" })}>
+          <Link href="/buy-support" className={cn(buttonVariants({ variant: "outline", size: "sm" }), "hud-btn")}>
             Buy Support
           </Link>
-          <Link href="/support-chuck" className={buttonVariants({ variant: "outline", size: "sm" })}>
+          <Link href="/support-chuck" className={cn(buttonVariants({ variant: "outline", size: "sm" }), "hud-btn")}>
             Support Chuck
           </Link>
-          <Link href="/chuckurrito" className={buttonVariants({ variant: "outline", size: "sm" })}>
+          <Link href="/chuckurrito" className={cn(buttonVariants({ variant: "outline", size: "sm" }), "hud-btn")}>
             Chuckurrito
           </Link>
-          <Link href="/karaoke-dj" className={buttonVariants({ variant: "outline", size: "sm" })}>
+          <Link href="/karaoke-dj" className={cn(buttonVariants({ variant: "outline", size: "sm" }), "hud-btn")}>
             Karaoke / DJ
           </Link>
         </div>

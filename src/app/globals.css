@@ -591,3 +591,242 @@
     display: none;
   }
 }
+
+/* ════════════════════════════════════════════════════════════════
+   STARK SYSTEM v2 — panels, reactor, scanlines, chips, display type
+   ════════════════════════════════════════════════════════════════ */
+
+/* ── Display type — Eurostile-style sci-fi headings (Orbitron) ── */
+.hud-title {
+  font-family: var(--font-orbitron), var(--font-inter), system-ui, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  text-shadow: 0 0 28px oklch(0.82 0.21 195 / 0.22);
+}
+
+/* ── CRT scanline overlay — sits above everything, purely decorative ── */
+.hud-scanlines {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 2px,
+    oklch(0 0 0 / 0.05) 3px
+  );
+}
+
+/* ── Vignette — pulls focus to center like a helmet HUD ── */
+.hud-vignette {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 120% 100% at 50% 30%,
+    transparent 55%,
+    oklch(0 0 0 / 0.35) 100%
+  );
+}
+
+/* ── HUD panel — glass slab with corner brackets + top accent line ── */
+.hud-panel {
+  position: relative;
+  border-radius: 0.75rem;
+  background: linear-gradient(
+    165deg,
+    oklch(0.145 0.02 240 / 0.92),
+    oklch(0.115 0.018 240 / 0.96)
+  );
+  border: 1px solid oklch(1 0 0 / 0.08);
+  transition:
+    border-color 300ms ease-out,
+    box-shadow 300ms ease-out,
+    transform 300ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.hud-panel::before {
+  content: "";
+  position: absolute;
+  inset: 7px;
+  pointer-events: none;
+  --b: oklch(0.82 0.21 195 / 0.4);
+  background:
+    linear-gradient(var(--b), var(--b)) left 0 top 0 / 10px 1px,
+    linear-gradient(var(--b), var(--b)) left 0 top 0 / 1px 10px,
+    linear-gradient(var(--b), var(--b)) right 0 top 0 / 10px 1px,
+    linear-gradient(var(--b), var(--b)) right 0 top 0 / 1px 10px,
+    linear-gradient(var(--b), var(--b)) left 0 bottom 0 / 10px 1px,
+    linear-gradient(var(--b), var(--b)) left 0 bottom 0 / 1px 10px,
+    linear-gradient(var(--b), var(--b)) right 0 bottom 0 / 10px 1px,
+    linear-gradient(var(--b), var(--b)) right 0 bottom 0 / 1px 10px;
+  background-repeat: no-repeat;
+  opacity: 0.65;
+  transition: opacity 300ms ease-out;
+}
+.hud-panel::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 18%;
+  right: 18%;
+  height: 1px;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, var(--px-40), transparent);
+}
+@media (hover: hover) {
+  .hud-panel:hover {
+    border-color: var(--px-30);
+    box-shadow:
+      0 0 24px var(--px-10),
+      0 12px 32px oklch(0 0 0 / 0.45);
+  }
+  .hud-panel:hover::before {
+    opacity: 1;
+  }
+  .hud-panel--lift:hover {
+    transform: translateY(-3px);
+  }
+}
+
+/* Panel label — tiny mono system tag with square indicator */
+.hud-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 0.625rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: oklch(0.82 0.21 195 / 0.75);
+  white-space: nowrap;
+}
+.hud-label::before {
+  content: "";
+  width: 5px;
+  height: 5px;
+  flex-shrink: 0;
+  background: var(--primary);
+  box-shadow: 0 0 6px var(--px-50);
+}
+
+/* ── Angular chip — clipped-corner badge ── */
+.hud-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.65rem;
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--primary);
+  background: var(--px-10);
+  border: 1px solid var(--px-30);
+  clip-path: polygon(
+    7px 0, 100% 0, 100% calc(100% - 7px),
+    calc(100% - 7px) 100%, 0 100%, 0 7px
+  );
+}
+
+/* ── Angular button — clip the corners of primary CTAs ── */
+.hud-btn {
+  border-radius: 0 !important;
+  clip-path: polygon(
+    10px 0, 100% 0, 100% calc(100% - 10px),
+    calc(100% - 10px) 100%, 0 100%, 0 10px
+  );
+}
+/* Wrapper restores the glow that clip-path would cut off */
+.hud-btn-glow {
+  display: inline-flex;
+  filter: drop-shadow(0 0 14px var(--px-20));
+  transition: filter 300ms ease-out;
+}
+@media (hover: hover) {
+  .hud-btn-glow:hover {
+    filter: drop-shadow(0 0 22px var(--px-40));
+  }
+}
+
+/* ── Section rule — hairline with a glowing head segment ── */
+.hud-rule {
+  position: relative;
+  height: 1px;
+  background: oklch(1 0 0 / 0.06);
+}
+.hud-rule::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 1px;
+  width: 80px;
+  background: linear-gradient(90deg, var(--primary), transparent);
+  box-shadow: 0 0 8px var(--px-40);
+}
+
+/* ── Arc reactor — spin + core pulse ── */
+.arc-reactor {
+  filter: drop-shadow(0 0 26px var(--px-30));
+}
+.arc-reactor__spin,
+.arc-reactor__spin--rev,
+.arc-reactor__spin--fast {
+  transform-origin: 50% 50%;
+  transform-box: view-box;
+  animation: reactor-spin 26s linear infinite;
+}
+.arc-reactor__spin--rev {
+  animation: reactor-spin 17s linear infinite reverse;
+}
+.arc-reactor__spin--fast {
+  animation: reactor-spin 9s linear infinite;
+}
+.arc-reactor__core {
+  animation: reactor-core 3s ease-in-out infinite;
+}
+@keyframes reactor-spin {
+  to { transform: rotate(360deg); }
+}
+@keyframes reactor-core {
+  0%, 100% { opacity: 0.7; }
+  50%      { opacity: 1; }
+}
+
+/* ── Avatar reactor rings — orbiting dashes around the profile photo ── */
+.reactor-ring {
+  position: absolute;
+  inset: -9px;
+  border-radius: 50%;
+  border: 1px dashed var(--px-40);
+  pointer-events: none;
+  animation: reactor-spin 14s linear infinite;
+}
+.reactor-ring--rev {
+  inset: -15px;
+  border: 1px dotted var(--px-20);
+  animation: reactor-spin 24s linear infinite reverse;
+}
+
+/* ── Nav index — "01"-style mono prefixes ── */
+.nav-index {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 0.625rem;
+  letter-spacing: 0.12em;
+  color: var(--px-30);
+  transition: color 200ms ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .arc-reactor__spin,
+  .arc-reactor__spin--rev,
+  .arc-reactor__spin--fast,
+  .arc-reactor__core,
+  .reactor-ring,
+  .reactor-ring--rev {
+    animation: none !important;
+  }
+}

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Geist_Mono } from "next/font/google";
+import { Inter, Geist_Mono, Orbitron } from "next/font/google";
 import "./globals.css";
 import { Sidebar } from "@/components/Sidebar";
 import { BootSequence } from "@/components/BootSequence";
@@ -16,6 +16,13 @@ const inter = Inter({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+const orbitron = Orbitron({
+  variable: "--font-orbitron",
+  subsets: ["latin"],
+  weight: ["500", "700", "900"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -39,10 +46,12 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${geistMono.variable} dark antialiased`}
+      className={`${inter.variable} ${geistMono.variable} ${orbitron.variable} dark antialiased`}
     >
       <body className="min-h-screen flex bg-background text-foreground">
         <div className="hud-grid" aria-hidden />
+        <div className="hud-vignette" aria-hidden />
+        <div className="hud-scanlines" aria-hidden />
         <BootSequence />
         <CartProvider>
           <Sidebar />

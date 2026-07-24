@@ -1,9 +1,8 @@
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { HudPageHeader } from "@/components/HudPageHeader";
+import { HudPanel } from "@/components/HudPanel";
 
 const offerings = [
   {
@@ -50,63 +49,76 @@ const faqs = [
 export default function KaraokeDJPage() {
   return (
     <div className="flex flex-col gap-8 px-6 py-10 max-w-4xl w-full mx-auto">
-      <section className="flex flex-col gap-3">
-        <div className="flex items-center gap-3 flex-wrap">
-          <h1 className="text-2xl font-bold text-foreground">Karaoke & DJ</h1>
-          <Badge className="bg-primary/20 text-primary border border-primary/30 text-xs">
-            Events & Entertainment
-          </Badge>
-        </div>
-        <p className="text-muted-foreground text-base leading-relaxed max-w-2xl">
-          Music is a core part of what Chuck does. Whether you need a karaoke
-          night for your crew, a DJ for your event, or just someone who really
-          knows how to read a room and keep the energy right — Chuck has you
-          covered.
-        </p>
-      </section>
+      <HudPageHeader
+        code="SEC.03 // AUDIO_OPS"
+        title="Karaoke & DJ"
+        chip="Events & Entertainment"
+        telemetry={["SOUND_SYSTEM: READY", "DECIBELS: YES", { kind: "uptime" }]}
+      >
+        Music is a core part of what Chuck does. Whether you need a karaoke
+        night for your crew, a DJ for your event, or just someone who really
+        knows how to read a room and keep the energy right — Chuck has you
+        covered.
+      </HudPageHeader>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {offerings.map(({ icon, title, desc }) => (
-          <Card key={title} className="bg-card border-border hover:border-primary/40 transition-colors">
-            <CardContent className="pt-5 pb-5 px-5 flex flex-col gap-2">
+        {offerings.map(({ icon, title, desc }, i) => (
+          <HudPanel
+            key={title}
+            label={`MOD.${String(i + 1).padStart(2, "0")}`}
+            lift
+          >
+            <div className="px-5 pt-3 pb-5 flex flex-col gap-2">
               <span className="text-3xl">{icon}</span>
               <h3 className="font-semibold text-card-foreground">{title}</h3>
               <p className="text-sm text-muted-foreground leading-relaxed">{desc}</p>
-            </CardContent>
-          </Card>
+            </div>
+          </HudPanel>
         ))}
       </div>
 
-      <Separator className="bg-border" />
+      <div className="hud-rule" />
 
       <section className="flex flex-col gap-4">
-        <h2 className="text-lg font-semibold text-foreground">FAQ</h2>
+        <h2 className="hud-title text-lg font-semibold text-foreground">FAQ</h2>
         <div className="flex flex-col gap-4">
-          {faqs.map(({ q, a }) => (
-            <div key={q} className="flex flex-col gap-1">
-              <p className="text-sm font-medium text-foreground">{q}</p>
-              <p className="text-sm text-muted-foreground">{a}</p>
+          {faqs.map(({ q, a }, i) => (
+            <div key={q} className="flex gap-4">
+              <span
+                className="font-mono text-[11px] pt-0.5 shrink-0"
+                style={{ color: "oklch(0.82 0.21 195 / 0.6)" }}
+              >
+                Q.{String(i + 1).padStart(2, "0")}
+              </span>
+              <div className="flex flex-col gap-1">
+                <p className="text-sm font-medium text-foreground">{q}</p>
+                <p className="text-sm text-muted-foreground">{a}</p>
+              </div>
             </div>
           ))}
         </div>
       </section>
 
-      <Separator className="bg-border" />
+      <div className="hud-rule" />
 
       <section className="flex flex-col gap-3">
-        <h2 className="text-lg font-semibold text-foreground">Book Chuck for Your Event</h2>
+        <h2 className="hud-title text-lg font-semibold text-foreground">
+          Book Chuck for Your Event
+        </h2>
         <p className="text-sm text-muted-foreground max-w-xl">
           Reach out through the Help page to discuss your event, dates, and
           pricing. Most bookings are custom-quoted based on duration and setup.
         </p>
         <div className="flex gap-3">
-          <Link
-            href="/help"
-            className={cn(buttonVariants(), "bg-primary text-primary-foreground hover:bg-primary/90")}
-          >
-            Get in Touch
-          </Link>
-          <Link href="/buy-support" className={buttonVariants({ variant: "outline" })}>
+          <span className="hud-btn-glow">
+            <Link
+              href="/help"
+              className={cn(buttonVariants(), "hud-btn bg-primary text-primary-foreground hover:bg-primary/90")}
+            >
+              Get in Touch
+            </Link>
+          </span>
+          <Link href="/buy-support" className={cn(buttonVariants({ variant: "outline" }), "hud-btn")}>
             Browse Services
           </Link>
         </div>
