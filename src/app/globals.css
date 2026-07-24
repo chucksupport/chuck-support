@@ -738,6 +738,99 @@
   animation: reactor-spin 24s linear infinite reverse;
 }
 
+/* ── Mobile menu — reactor FAB + HUD overlay ── */
+
+/* Rotating dashed ring inside the FAB; spins up while the menu is open */
+.menu-ring {
+  position: absolute;
+  inset: 4px;
+  border-radius: 50%;
+  border: 1px dashed var(--px-50);
+  pointer-events: none;
+  animation: reactor-spin 12s linear infinite;
+  transition: border-color 300ms ease-out;
+}
+.menu-ring--open {
+  animation-duration: 2.5s;
+  border-color: var(--primary);
+}
+
+/* Hamburger bars that morph into an X */
+.menu-bar {
+  display: block;
+  width: 18px;
+  height: 1.5px;
+  border-radius: 1px;
+  background: var(--primary);
+  box-shadow: 0 0 6px var(--px-40);
+  transition:
+    transform 300ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 200ms ease-out;
+}
+.menu-fab--open .menu-bar:nth-child(1) {
+  transform: translateY(5.5px) rotate(45deg);
+}
+.menu-fab--open .menu-bar:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0.2);
+}
+.menu-fab--open .menu-bar:nth-child(3) {
+  transform: translateY(-5.5px) rotate(-45deg);
+}
+
+/* Corner brackets that snap in when the overlay opens */
+.menu-bracket {
+  position: absolute;
+  width: 26px;
+  height: 26px;
+  border: 0 solid var(--px-50);
+  opacity: 0;
+  transform: scale(1.5);
+  transition:
+    opacity 400ms ease-out,
+    transform 500ms cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+.menu-bracket--tl { top: 14px;    left: 14px;   border-top-width: 1px;    border-left-width: 1px; }
+.menu-bracket--tr { top: 14px;    right: 14px;  border-top-width: 1px;    border-right-width: 1px; }
+.menu-bracket--bl { bottom: 14px; left: 14px;   border-bottom-width: 1px; border-left-width: 1px; }
+.menu-bracket--br { bottom: 14px; right: 14px;  border-bottom-width: 1px; border-right-width: 1px; }
+.menu-overlay--open .menu-bracket {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* One-shot scan line sweeping down the overlay on open */
+.menu-scan {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--px-50), transparent);
+  box-shadow: 0 0 16px var(--px-40);
+  pointer-events: none;
+  animation: menu-scan 900ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+@keyframes menu-scan {
+  from { top: 0; opacity: 1; }
+  80%  { opacity: 1; }
+  to   { top: 100%; opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menu-ring {
+    animation: none;
+  }
+  .menu-scan {
+    display: none;
+  }
+  .menu-bracket,
+  .menu-bar {
+    transition: none;
+  }
+}
+
 /* ── Nav index — "01"-style mono prefixes ── */
 .nav-index {
   font-family: var(--font-geist-mono), ui-monospace, monospace;
