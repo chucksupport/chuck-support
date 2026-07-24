@@ -2,9 +2,12 @@
 
 import { TransitionLink as Link } from "@/components/TransitionLink";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { useCart } from "@/contexts/CartContext";
+import { ArcReactor } from "@/components/ArcReactor";
+import { DecodeText } from "@/components/DecodeText";
+import { HudTelemetry } from "@/components/HudTelemetry";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -19,6 +22,22 @@ export function Sidebar() {
   const pathname = usePathname();
   const { totalItems } = useCart();
   const [menuOpen, setMenuOpen] = useState(false);
+
+  // While the overlay is open: lock background scroll and close on Escape.
+  useEffect(() => {
+    if (!menuOpen) return;
+    document.documentElement.style.overflow = "hidden";
+    document.body.style.overflow = "hidden";
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMenuOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.documentElement.style.overflow = "";
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [menuOpen]);
 
   return (
     <>
@@ -172,43 +191,24 @@ export function Sidebar() {
       ────────────────────────────────────────── */}
       <button
         onClick={() => setMenuOpen((v) => !v)}
-        className={`fixed top-4 right-4 z-50 md:hidden h-12 min-w-[5.5rem] px-5 rounded-full transition-all duration-300 overflow-hidden${
-          menuOpen ? "" : " hud-pulse"
+        className={`menu-fab fixed top-4 right-4 z-50 md:hidden h-14 w-14 rounded-full flex items-center justify-center transition-all duration-300${
+          menuOpen ? " menu-fab--open" : " hud-pulse"
         }`}
         style={{
-          background: menuOpen
-            ? "oklch(0.13 0.018 240 / 0.9)"
-            : "var(--primary)",
-          border: menuOpen
-            ? "1.5px solid var(--px-50)"
-            : "1.5px solid transparent",
-          boxShadow: menuOpen
-            ? "0 0 24px var(--px-30)"
-            : undefined,
-          backdropFilter: menuOpen ? "blur(12px)" : "none",
+          background: "oklch(0.13 0.018 240 / 0.92)",
+          border: "1.5px solid var(--px-50)",
+          boxShadow: menuOpen ? "0 0 24px var(--px-30)" : undefined,
+          backdropFilter: "blur(12px)",
+          WebkitBackdropFilter: "blur(12px)",
         }}
         aria-label={menuOpen ? "Close navigation" : "Open navigation"}
         aria-expanded={menuOpen}
       >
-        {/* "menu" label — visible when closed */}
-        <span
-          className="absolute inset-0 flex items-center justify-center font-bold tracking-wide text-sm lowercase transition-opacity duration-200 select-none"
-          style={{
-            color: "oklch(0.08 0 0)",
-            opacity: menuOpen ? 0 : 1,
-          }}
-        >
-          menu
-        </span>
-        {/* "close" label — visible when open */}
-        <span
-          className="absolute inset-0 flex items-center justify-center font-bold tracking-wide text-sm lowercase transition-opacity duration-200 select-none"
-          style={{
-            color: "var(--primary)",
-            opacity: menuOpen ? 1 : 0,
-          }}
-        >
-          close
+        <span className={`menu-ring${menuOpen ? " menu-ring--open" : ""}`} aria-hidden />
+        <span className="flex flex-col items-center gap-1" aria-hidden>
+          <span className="menu-bar" />
+          <span className="menu-bar" />
+          <span className="menu-bar" />
         </span>
       </button>
 
@@ -216,12 +216,21 @@ export function Sidebar() {
           MOBILE: FULL-SCREEN OVERLAY
       ────────────────────────────────────────── */}
       <div
-        className="fixed inset-0 z-40 md:hidden flex flex-col items-center justify-center transition-all duration-300"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Site navigation"
+        onClick={() => setMenuOpen(false)}
+        className={`fixed inset-0 z-40 md:hidden flex flex-col items-center justify-center transition-all duration-300${
+          menuOpen ? " menu-overlay--open" : ""
+        }`}
         style={{
           background: "oklch(0.09 0.015 240 / 0.97)",
           backdropFilter: "blur(24px)",
           WebkitBackdropFilter: "blur(24px)",
           opacity: menuOpen ? 1 : 0,
+          // visibility transitions discretely at the end of the fade-out,
+          // so the hidden menu can't trap keyboard focus or screen readers
+          visibility: menuOpen ? "visible" : "hidden",
           pointerEvents: menuOpen ? "auto" : "none",
         }}
       >
@@ -233,6 +242,26 @@ export function Sidebar() {
               "radial-gradient(ellipse 60% 50% at 50% 50%, var(--px-10), transparent)",
           }}
         />
+
+        {/* Giant arc reactor slowly spinning behind the nav */}
+        {menuOpen && (
+          <div
+            className="absolute inset-0 flex items-center justify-center pointer-events-none"
+            style={{ opacity: 0.16 }}
+            aria-hidden
+          >
+            <ArcReactor size={380} />
+          </div>
+        )}
+
+        {/* HUD corner brackets */}
+        <span className="menu-bracket menu-bracket--tl" aria-hidden />
+        <span className="menu-bracket menu-bracket--tr" style={{ transitionDelay: "60ms" }} aria-hidden />
+        <span className="menu-bracket menu-bracket--bl" style={{ transitionDelay: "120ms" }} aria-hidden />
+        <span className="menu-bracket menu-bracket--br" style={{ transitionDelay: "180ms" }} aria-hidden />
+
+        {/* One-shot scan sweep — remounts (and replays) on each open */}
+        {menuOpen && <span className="menu-scan" aria-hidden />}
 
         {/* Profile */}
         <div
@@ -262,8 +291,8 @@ export function Sidebar() {
           <span className="text-sm font-bold gradient-text">chuck.support</span>
         </div>
 
-        {/* Nav links — staggered fade-up */}
-        <nav className="flex flex-col items-center gap-1 relative z-10">
+        {/* Nav links — staggered fade-up with decode-in labels */}
+        <nav className="flex flex-col items-stretch gap-1 relative z-10 w-full max-w-sm px-8">
           {navLinks.map(({ href, label }, i) => {
             const active = pathname === href;
             return (
@@ -271,30 +300,58 @@ export function Sidebar() {
                 key={href}
                 href={href}
                 onClick={() => setMenuOpen(false)}
-                className="text-4xl font-black tracking-tight py-1 px-6 rounded-xl transition-all duration-300"
+                className="hud-title flex items-baseline gap-3 whitespace-nowrap text-[clamp(1.1rem,5.2vw,1.55rem)] font-black py-2.5 px-4 rounded-lg transition-all duration-300 active:scale-95"
                 style={{
                   transitionDelay: menuOpen ? `${(i + 1) * 55}ms` : "0ms",
                   opacity: menuOpen ? 1 : 0,
                   transform: menuOpen ? "translateY(0)" : "translateY(20px)",
-                  color: active ? "var(--primary)" : "oklch(0.94 0.005 220 / 0.8)",
+                  color: active ? "var(--primary)" : "oklch(0.94 0.005 220 / 0.85)",
                   textShadow: active ? "0 0 30px var(--px-40)" : "none",
-                }}
-                onMouseEnter={(e) => {
-                  if (!active)
-                    (e.currentTarget as HTMLAnchorElement).style.color =
-                      "oklch(0.94 0.005 220)";
-                }}
-                onMouseLeave={(e) => {
-                  if (!active)
-                    (e.currentTarget as HTMLAnchorElement).style.color =
-                      "oklch(0.94 0.005 220 / 0.8)";
+                  background: active ? "var(--px-10)" : "transparent",
                 }}
               >
-                {label}
+                <span
+                  className="font-mono text-[11px] font-normal tracking-[0.14em]"
+                  style={{
+                    color: active ? "var(--primary)" : "var(--px-40)",
+                  }}
+                >
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                {menuOpen ? (
+                  <DecodeText
+                    key={`decode-${i}`}
+                    text={label}
+                    delay={140 + i * 70}
+                    speed={26}
+                  />
+                ) : (
+                  label
+                )}
+                {href === "/buy-support" && totalItems > 0 && (
+                  <span
+                    className="ml-auto self-center font-mono text-xs font-bold px-2 py-0.5 rounded-full"
+                    style={{
+                      background: "var(--primary)",
+                      color: "oklch(0.08 0 0)",
+                    }}
+                  >
+                    {totalItems}
+                  </span>
+                )}
               </Link>
             );
           })}
         </nav>
+
+        {/* Live telemetry footer */}
+        {menuOpen && (
+          <div className="absolute bottom-8 left-0 right-0 flex justify-center">
+            <HudTelemetry
+              items={["NAV_SYS", { kind: "uptime" }, { kind: "latency" }]}
+            />
+          </div>
+        )}
       </div>
     </>
   );
