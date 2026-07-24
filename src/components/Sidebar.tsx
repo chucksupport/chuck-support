@@ -53,6 +53,9 @@ export function Sidebar() {
                 background: "radial-gradient(circle, var(--px-40), transparent 70%)",
               }}
             />
+            {/* Arc-reactor orbit rings */}
+            <span className="reactor-ring" aria-hidden />
+            <span className="reactor-ring reactor-ring--rev" aria-hidden />
             <div
               className="relative w-20 h-20 rounded-full overflow-hidden"
               style={{
@@ -82,7 +85,7 @@ export function Sidebar() {
 
         {/* Nav links */}
         <nav className="flex flex-col gap-0.5 px-2 flex-1 pb-4">
-          {navLinks.map(({ href, label }) => {
+          {navLinks.map(({ href, label }, i) => {
             const active = pathname === href;
             return (
               <Link
@@ -118,15 +121,23 @@ export function Sidebar() {
                   />
                 )}
 
-                <span
-                  className="transition-colors duration-200"
-                  style={
-                    active
-                      ? { color: "var(--primary)" }
-                      : { color: "oklch(0.60 0.012 230)" }
-                  }
-                >
-                  {label}
+                <span className="flex items-center gap-2.5">
+                  <span
+                    className="nav-index"
+                    style={active ? { color: "var(--primary)" } : undefined}
+                  >
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <span
+                    className="transition-colors duration-200"
+                    style={
+                      active
+                        ? { color: "var(--primary)" }
+                        : { color: "oklch(0.60 0.012 230)" }
+                    }
+                  >
+                    {label}
+                  </span>
                 </span>
 
                 {href === "/buy-support" && totalItems > 0 && (
@@ -232,18 +243,21 @@ export function Sidebar() {
             transform: menuOpen ? "translateY(0)" : "translateY(16px)",
           }}
         >
-          <div
-            className="w-16 h-16 rounded-full overflow-hidden"
-            style={{
-              border: "2px solid var(--px-50)",
-              boxShadow: "0 0 20px var(--px-30)",
-            }}
-          >
-            <img
-              src="/images/profile.jpg"
-              alt="Chuck"
-              className="w-full h-full object-cover"
-            />
+          <div className="relative">
+            <span className="reactor-ring" aria-hidden />
+            <div
+              className="w-16 h-16 rounded-full overflow-hidden"
+              style={{
+                border: "2px solid var(--px-50)",
+                boxShadow: "0 0 20px var(--px-30)",
+              }}
+            >
+              <img
+                src="/images/profile.jpg"
+                alt="Chuck"
+                className="w-full h-full object-cover"
+              />
+            </div>
           </div>
           <span className="text-sm font-bold gradient-text">chuck.support</span>
         </div>

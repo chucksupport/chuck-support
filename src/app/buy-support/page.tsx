@@ -1,45 +1,48 @@
 "use client";
 
 import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { HudPageHeader } from "@/components/HudPageHeader";
 import { useCart } from "@/contexts/CartContext";
 import { products, type Product } from "@/lib/products";
 
-function ProductCard({ product }: { product: Product }) {
+function ProductCard({ product, index }: { product: Product; index: number }) {
   const { addItem, items, removeItem } = useCart();
   const cartItem = items.find((i) => i.product.id === product.id);
 
   return (
-    <Card className="bg-card border-border flex flex-col">
-      <CardHeader className="pb-2">
-        <div className="flex items-start justify-between gap-2">
-          <div className="flex items-center gap-2">
-            <span className="text-3xl">{product.emoji}</span>
-            <div>
-              <CardTitle className="text-base text-card-foreground leading-tight">
-                {product.name}
-              </CardTitle>
-              <Badge className="mt-1 text-xs bg-muted text-muted-foreground border-0">
-                {product.category}
-              </Badge>
-            </div>
-          </div>
-          <span className="text-lg font-bold text-primary whitespace-nowrap">
-            {product.priceDisplay}
-          </span>
+    <div className="hud-panel hud-panel--lift flex flex-col">
+      <div className="flex items-center justify-between gap-3 px-5 pt-4">
+        <span className="hud-label">{product.category}</span>
+        <span
+          className="font-mono text-[10px] uppercase tracking-[0.2em]"
+          style={{ color: "oklch(0.82 0.21 195 / 0.45)" }}
+        >
+          UNIT.{String(index + 1).padStart(2, "0")}
+        </span>
+      </div>
+      <div className="px-5 pt-3 pb-2 flex items-start justify-between gap-2">
+        <div className="flex items-center gap-3">
+          <span className="text-3xl">{product.emoji}</span>
+          <h3 className="text-base font-bold leading-tight text-card-foreground">
+            {product.name}
+          </h3>
         </div>
-      </CardHeader>
-      <CardContent className="flex flex-col gap-4 flex-1">
+        <span className="font-mono text-lg font-bold text-primary whitespace-nowrap"
+          style={{ textShadow: "0 0 16px var(--px-40)" }}
+        >
+          {product.priceDisplay}
+        </span>
+      </div>
+      <div className="px-5 pb-5 flex flex-col gap-4 flex-1">
         <p className="text-sm text-muted-foreground leading-relaxed">
           {product.description}
         </p>
         <div className="mt-auto">
           {cartItem ? (
             <div className="flex items-center gap-3">
-              <span className="text-sm text-muted-foreground">
+              <span className="font-mono text-xs uppercase tracking-wider text-muted-foreground">
                 In cart: {cartItem.quantity}
               </span>
               <Button
@@ -60,15 +63,15 @@ function ProductCard({ product }: { product: Product }) {
             </div>
           ) : (
             <Button
-              className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
+              className="hud-btn w-full bg-primary text-primary-foreground hover:bg-primary/90"
               onClick={() => addItem(product)}
             >
               Add to Cart
             </Button>
           )}
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }
 
@@ -79,8 +82,10 @@ function CartSummary() {
 
   if (items.length === 0) {
     return (
-      <div className="rounded-xl border border-border bg-card p-6 text-center text-sm text-muted-foreground">
-        Your cart is empty. Add something above!
+      <div className="hud-panel p-6 text-center">
+        <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
+          CART_MANIFEST: EMPTY — add something below
+        </p>
       </div>
     );
   }
@@ -110,10 +115,16 @@ function CartSummary() {
   }
 
   return (
-    <div className="rounded-xl border border-border bg-card p-6 flex flex-col gap-4">
-      <h2 className="font-semibold text-card-foreground">
-        Cart ({totalItems} item{totalItems !== 1 ? "s" : ""})
-      </h2>
+    <div className="hud-panel flex flex-col gap-4 p-6">
+      <div className="flex items-center justify-between gap-3">
+        <span className="hud-label">CART_MANIFEST</span>
+        <span
+          className="font-mono text-[10px] uppercase tracking-[0.2em]"
+          style={{ color: "oklch(0.82 0.21 195 / 0.45)" }}
+        >
+          {totalItems} ITEM{totalItems !== 1 ? "S" : ""}
+        </span>
+      </div>
       <div className="flex flex-col gap-2">
         {items.map((item) => (
           <div key={item.product.id} className="flex items-center gap-3 text-sm">
@@ -126,7 +137,7 @@ function CartSummary() {
               >
                 −
               </button>
-              <span className="w-6 text-center">{item.quantity}</span>
+              <span className="w-6 text-center font-mono">{item.quantity}</span>
               <button
                 className="w-6 h-6 rounded text-muted-foreground hover:text-foreground border border-border text-xs"
                 onClick={() => updateQuantity(item.product.id, item.quantity + 1)}
@@ -134,7 +145,7 @@ function CartSummary() {
                 +
               </button>
             </div>
-            <span className="text-muted-foreground w-20 text-right">
+            <span className="text-muted-foreground w-20 text-right font-mono text-xs">
               {item.product.price > 0
                 ? `$${((item.product.price * item.quantity) / 100).toFixed(2)}`
                 : "Pay what you can"}
@@ -144,8 +155,11 @@ function CartSummary() {
       </div>
       <Separator className="bg-border" />
       <div className="flex justify-between text-sm font-semibold">
-        <span>Total</span>
-        <span className="text-primary">
+        <span className="font-mono uppercase tracking-wider">Total</span>
+        <span
+          className="text-primary font-mono"
+          style={{ textShadow: "0 0 16px var(--px-40)" }}
+        >
           ${(totalPrice / 100).toFixed(2)}
           {items.some((i) => i.product.price === 0) && " + donation"}
         </span>
@@ -171,20 +185,20 @@ function CartSummary() {
 export default function BuySupportPage() {
   return (
     <div className="flex flex-col gap-8 px-6 py-10 max-w-4xl w-full mx-auto">
-      <div>
-        <h1 className="text-2xl font-bold text-foreground">Buy Support</h1>
-        <p className="text-sm text-muted-foreground mt-1">
-          Browse services, add what you need, and check out securely via Stripe.
-        </p>
-      </div>
+      <HudPageHeader
+        code="SEC.02 // BUY_SUPPORT"
+        title="Buy Support"
+        chip="Stripe Secured"
+        telemetry={["PAYMENT_GATEWAY: ARMED", { kind: "latency" }]}
+      >
+        Browse services, add what you need, and check out securely via Stripe.
+      </HudPageHeader>
 
       <CartSummary />
 
-      <Separator className="bg-border" />
-
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {products.map((p) => (
-          <ProductCard key={p.id} product={p} />
+        {products.map((p, i) => (
+          <ProductCard key={p.id} product={p} index={i} />
         ))}
       </div>
     </div>
