@@ -1,4 +1,4 @@
-import { ServicesGrid } from "@/components/ServicesGrid";
+import { ModuleConsole } from "@/components/ModuleConsole";
 import { HudTelemetry } from "@/components/HudTelemetry";
 import { ArcReactor } from "@/components/ArcReactor";
 import { DecodeText } from "@/components/DecodeText";
@@ -148,13 +148,14 @@ export default function HomePage() {
           </h2>
           <p className="text-sm" style={{ color: "oklch(0.60 0.012 230)" }}>
             A wide range of technical and creative services — all under one roof.
+            Select a module to inspect it, then run a diagnostic.
           </p>
           <HudTelemetry
             items={["SYS_OPS", "9 MODULES LOADED", "RUNTIME OK"]}
           />
         </div>
 
-        <ServicesGrid />
+        <ModuleConsole />
       </section>
 
       <div className="hud-rule" />
