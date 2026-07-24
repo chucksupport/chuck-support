@@ -142,6 +142,16 @@
   * {
     @apply border-border outline-ring/50;
   }
+  html,
+  body {
+    /* Decorative hero elements (glow blob, arc reactor) intentionally
+       bleed past the content edge. `clip` (not `hidden`) discards that
+       overflow without creating a scroll container, so the layout
+       viewport never widens on mobile — which would push fixed-position
+       elements like the menu pill off-screen — and the sticky sidebar
+       keeps working. */
+    overflow-x: clip;
+  }
   body {
     @apply bg-background text-foreground;
     /* Subtle dot-grid texture */
