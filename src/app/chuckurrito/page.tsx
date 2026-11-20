@@ -44,7 +44,7 @@ export default function ChuckurritoPage() {
         <p>
           🌯 The Chuckurrito is not just a burrito. It is a philosophy. Hand-crafted,
           generously stuffed, and wrapped with the kind of care that only comes
-          from someone who genuinely believes in what they&apos;re making.
+          from someone who believes in what they&apos;re making.
         </p>
         <p className="mt-3">
           Born from necessity, perfected through iteration, the Chuckurrito is
