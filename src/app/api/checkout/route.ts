@@ -29,6 +29,8 @@ export async function POST(request: NextRequest) {
   }
 
   const lineItems: { price: string; quantity: number }[] = [];
+  let hasRecurring = false;
+  let hasPayWhatYouCan = false;
   for (const item of items) {
     const product = products.find((p) => p.id === item.productId);
     const price = PRICE_IDS[item.productId];
@@ -40,14 +42,27 @@ export async function POST(request: NextRequest) {
       );
     }
     const quantity = Math.max(1, Math.floor(Number(item.quantity) || 1));
+    if (product.recurring) hasRecurring = true;
+    if (product.price === 0) hasPayWhatYouCan = true;
     lineItems.push({ price, quantity });
+  }
+
+  // Stripe only allows customer-chosen amounts in one-time payment mode.
+  if (hasRecurring && hasPayWhatYouCan) {
+    return Response.json(
+      {
+        error:
+          "Hosting subscriptions can't be combined with pay-what-you-can items in one checkout. Please check them out separately.",
+      },
+      { status: 400 },
+    );
   }
 
   const origin = request.headers.get("origin") ?? "https://chuck.support";
 
   try {
     const session = await stripe.checkout.sessions.create({
-      mode: "payment",
+      mode: hasRecurring ? "subscription" : "payment",
       line_items: lineItems,
       success_url: `${origin}/buy-support?success=1`,
       cancel_url: `${origin}/buy-support?canceled=1`,
