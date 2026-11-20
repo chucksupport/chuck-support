@@ -104,11 +104,15 @@ function CartSummary() {
           })),
         }),
       });
-      if (!res.ok) throw new Error("Checkout failed");
-      const { url } = await res.json() as { url: string };
-      window.location.href = url;
-    } catch {
-      setError("Something went wrong. Please try again.");
+      const data = (await res.json()) as { url?: string; error?: string };
+      if (!res.ok || !data.url) throw new Error(data.error || "Checkout failed");
+      window.location.href = data.url;
+    } catch (err) {
+      setError(
+        err instanceof Error && err.message !== "Checkout failed"
+          ? err.message
+          : "Something went wrong. Please try again.",
+      );
     } finally {
       setLoading(false);
     }
@@ -147,7 +151,7 @@ function CartSummary() {
             </div>
             <span className="text-muted-foreground w-20 text-right font-mono text-xs">
               {item.product.price > 0
-                ? `$${((item.product.price * item.quantity) / 100).toFixed(2)}`
+                ? `${((item.product.price * item.quantity) / 100).toFixed(2)}${item.product.recurring ? "/mo" : ""}`
                 : "Pay what you can"}
             </span>
           </div>
@@ -162,6 +166,7 @@ function CartSummary() {
         >
           ${(totalPrice / 100).toFixed(2)}
           {items.some((i) => i.product.price === 0) && " + donation"}
+          {items.some((i) => i.product.recurring) && " · hosting renews monthly"}
         </span>
       </div>
       {error && <p className="text-destructive text-sm">{error}</p>}

@@ -6,6 +6,8 @@ export interface Product {
   priceDisplay: string;
   category: string;
   emoji?: string;
+  /** Set for subscription products; Stripe Checkout runs in subscription mode. */
+  recurring?: "month";
 }
 
 export const products: Product[] = [
@@ -21,11 +23,12 @@ export const products: Product[] = [
   },
   {
     id: "hosting-1mo",
-    name: "Hosting – 1 Month",
+    name: "Hosting – Monthly",
     description:
-      "One month of reliable web hosting managed by Chuck. Includes setup, monitoring, and basic support.",
+      "Reliable web hosting managed by Chuck, billed monthly. Includes setup, monitoring, and basic support. Cancel anytime.",
     price: 5000,
-    priceDisplay: "$50.00",
+    priceDisplay: "$50.00/mo",
+    recurring: "month",
     category: "Hosting",
     emoji: "🖥️",
   },
