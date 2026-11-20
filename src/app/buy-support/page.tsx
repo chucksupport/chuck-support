@@ -99,7 +99,7 @@ function CartSummary() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           items: items.map((i) => ({
-            stripePriceId: i.product.stripePriceId,
+            productId: i.product.id,
             quantity: i.quantity,
           })),
         }),

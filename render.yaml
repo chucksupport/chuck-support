@@ -21,9 +21,7 @@ services:
         sync: false
       - key: STRIPE_PRICE_HOSTING_1MO
         sync: false
+      - key: STRIPE_PRICE_SUPPORT_1HR
+        sync: false
       - key: STRIPE_PRICE_MORAL_SUPPORT
-        sync: false
-      - key: STRIPE_PRICE_WEBSITE_BUILD
-        sync: false
-      - key: STRIPE_PRICE_DATA_MIGRATION
         sync: false

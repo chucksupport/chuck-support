@@ -1,12 +1,23 @@
 import Stripe from "stripe";
 import { NextRequest } from "next/server";
+import { products } from "@/lib/products";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY ?? "sk_test_placeholder", {
   apiVersion: "2026-03-25.dahlia",
 });
 
+// Price IDs live server-side only. Client code never sees these env vars
+// (they are not NEXT_PUBLIC_), so the client sends product ids and we map
+// them here.
+const PRICE_IDS: Record<string, string | undefined> = {
+  chuckurrito: process.env.STRIPE_PRICE_CHUCKURRITO,
+  "hosting-1mo": process.env.STRIPE_PRICE_HOSTING_1MO,
+  "support-1hr": process.env.STRIPE_PRICE_SUPPORT_1HR,
+  "moral-support-1hr": process.env.STRIPE_PRICE_MORAL_SUPPORT,
+};
+
 interface LineItem {
-  stripePriceId: string;
+  productId: string;
   quantity: number;
 }
 
@@ -17,21 +28,37 @@ export async function POST(request: NextRequest) {
     return Response.json({ error: "No items in cart" }, { status: 400 });
   }
 
+  const lineItems: { price: string; quantity: number }[] = [];
+  for (const item of items) {
+    const product = products.find((p) => p.id === item.productId);
+    const price = PRICE_IDS[item.productId];
+    if (!product || !price) {
+      console.error(`checkout: no Stripe price configured for product "${item.productId}"`);
+      return Response.json(
+        { error: `Product "${item.productId}" is not available for checkout` },
+        { status: 400 },
+      );
+    }
+    const quantity = Math.max(1, Math.floor(Number(item.quantity) || 1));
+    lineItems.push({ price, quantity });
+  }
+
   const origin = request.headers.get("origin") ?? "https://chuck.support";
 
-  const session = await stripe.checkout.sessions.create({
-    mode: "payment",
-    line_items: items.map((item) => ({
-      price: item.stripePriceId,
-      quantity: item.quantity,
-    })),
-    success_url: `${origin}/buy-support?success=1`,
-    cancel_url: `${origin}/buy-support?canceled=1`,
-    billing_address_collection: "required",
-    metadata: {
-      source: "chuck.support",
-    },
-  });
-
-  return Response.json({ url: session.url });
+  try {
+    const session = await stripe.checkout.sessions.create({
+      mode: "payment",
+      line_items: lineItems,
+      success_url: `${origin}/buy-support?success=1`,
+      cancel_url: `${origin}/buy-support?canceled=1`,
+      billing_address_collection: "required",
+      metadata: {
+        source: "chuck.support",
+      },
+    });
+    return Response.json({ url: session.url });
+  } catch (err) {
+    console.error("checkout: Stripe session creation failed", err);
+    return Response.json({ error: "Unable to start checkout" }, { status: 502 });
+  }
 }
