@@ -63,6 +63,8 @@ Open [http://localhost:3000](http://localhost:3000).
 1. Go to your [Stripe Dashboard](https://dashboard.stripe.com)
 2. Create a product for each item in `src/lib/products.ts`
 3. Copy each **Price ID** (starts with `price_`) into `.env.local`
+   - **Hour of Moral Support**: one-time price with "Customer chooses price"
+   - **Chuck in Your Corner**: recurring **$1.00/month** price. The cart quantity is the dollars per month, so a customer picking $5 checks out with quantity 5.
 4. For testing, use `sk_test_` and `pk_test_` keys
 5. For production, swap to live keys in Render environment settings
 

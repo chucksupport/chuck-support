@@ -25,3 +25,5 @@ services:
         sync: false
       - key: STRIPE_PRICE_MORAL_SUPPORT
         sync: false
+      - key: STRIPE_PRICE_CORNER
+        sync: false
