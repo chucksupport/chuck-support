@@ -7,9 +7,13 @@ import { HudPageHeader } from "@/components/HudPageHeader";
 import { useCart } from "@/contexts/CartContext";
 import { products, type Product } from "@/lib/products";
 
+const PWYW_PRESETS = [3, 5, 10, 20];
+
 function ProductCard({ product, index }: { product: Product; index: number }) {
   const { addItem, items, removeItem } = useCart();
   const cartItem = items.find((i) => i.product.id === product.id);
+  // Dollars per month for pay-what-you-want subscriptions (quantity of a $1 price).
+  const [amount, setAmount] = useState(5);
 
   return (
     <div className="hud-panel hud-panel--lift flex flex-col">
@@ -43,22 +47,67 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
           {cartItem ? (
             <div className="flex items-center gap-3">
               <span className="font-mono text-xs uppercase tracking-wider text-muted-foreground">
-                In cart: {cartItem.quantity}
+                In cart: {product.payWhatYouWant ? `$${cartItem.quantity}/mo` : cartItem.quantity}
               </span>
-              <Button
-                size="sm"
-                variant="outline"
-                className="ml-auto"
-                onClick={() => addItem(product)}
-              >
-                + Add more
-              </Button>
+              {!product.payWhatYouWant && (
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className="ml-auto"
+                  onClick={() => addItem(product)}
+                >
+                  + Add more
+                </Button>
+              )}
               <Button
                 size="sm"
                 variant="destructive"
+                className={product.payWhatYouWant ? "ml-auto" : undefined}
                 onClick={() => removeItem(product.id)}
               >
                 Remove
+              </Button>
+            </div>
+          ) : product.payWhatYouWant ? (
+            <div className="flex flex-col gap-3">
+              <div className="flex items-center gap-2">
+                {PWYW_PRESETS.map((n) => (
+                  <button
+                    key={n}
+                    type="button"
+                    onClick={() => setAmount(n)}
+                    className={
+                      "flex-1 rounded border px-2 py-1 font-mono text-xs transition-colors " +
+                      (amount === n
+                        ? "border-primary text-primary"
+                        : "border-border text-muted-foreground hover:text-foreground")
+                    }
+                  >
+                    ${n}
+                  </button>
+                ))}
+                <label className="flex items-center gap-1 font-mono text-xs text-muted-foreground">
+                  $
+                  <input
+                    type="number"
+                    min={1}
+                    max={999}
+                    step={1}
+                    value={amount}
+                    onChange={(e) =>
+                      setAmount(Math.min(999, Math.max(1, Math.floor(Number(e.target.value) || 1))))
+                    }
+                    className="w-16 rounded border border-border bg-transparent px-2 py-1 text-right text-foreground"
+                    aria-label="Dollars per month"
+                  />
+                  /mo
+                </label>
+              </div>
+              <Button
+                className="hud-btn w-full bg-primary text-primary-foreground hover:bg-primary/90"
+                onClick={() => addItem(product, amount)}
+              >
+                Add ${amount}/mo to Cart
               </Button>
             </div>
           ) : (
@@ -141,7 +190,9 @@ function CartSummary() {
               >
                 −
               </button>
-              <span className="w-6 text-center font-mono">{item.quantity}</span>
+              <span className="min-w-6 text-center font-mono">
+                {item.product.payWhatYouWant ? `$${item.quantity}` : item.quantity}
+              </span>
               <button
                 className="w-6 h-6 rounded text-muted-foreground hover:text-foreground border border-border text-xs"
                 onClick={() => updateQuantity(item.product.id, item.quantity + 1)}
@@ -166,7 +217,7 @@ function CartSummary() {
         >
           ${(totalPrice / 100).toFixed(2)}
           {items.some((i) => i.product.price === 0) && " + donation"}
-          {items.some((i) => i.product.recurring) && " · hosting renews monthly"}
+          {items.some((i) => i.product.recurring) && " · renews monthly"}
         </span>
       </div>
       {error && <p className="text-destructive text-sm">{error}</p>}

@@ -14,7 +14,11 @@ const PRICE_IDS: Record<string, string | undefined> = {
   "hosting-1mo": process.env.STRIPE_PRICE_HOSTING_1MO,
   "support-1hr": process.env.STRIPE_PRICE_SUPPORT_1HR,
   "moral-support-1hr": process.env.STRIPE_PRICE_MORAL_SUPPORT,
+  // $1/month price; quantity = dollars per month (see Product.payWhatYouWant).
+  "chuck-in-your-corner": process.env.STRIPE_PRICE_CORNER,
 };
+
+const MAX_PWYW_DOLLARS = 999;
 
 interface LineItem {
   productId: string;
@@ -28,7 +32,11 @@ export async function POST(request: NextRequest) {
     return Response.json({ error: "No items in cart" }, { status: 400 });
   }
 
-  const lineItems: { price: string; quantity: number }[] = [];
+  const lineItems: {
+    price: string;
+    quantity: number;
+    adjustable_quantity?: { enabled: boolean; minimum?: number; maximum?: number };
+  }[] = [];
   let hasRecurring = false;
   let hasPayWhatYouCan = false;
   for (const item of items) {
@@ -41,10 +49,20 @@ export async function POST(request: NextRequest) {
         { status: 400 },
       );
     }
-    const quantity = Math.max(1, Math.floor(Number(item.quantity) || 1));
+    let quantity = Math.max(1, Math.floor(Number(item.quantity) || 1));
     if (product.recurring) hasRecurring = true;
     if (product.price === 0) hasPayWhatYouCan = true;
-    lineItems.push({ price, quantity });
+    if (product.payWhatYouWant) {
+      quantity = Math.min(quantity, MAX_PWYW_DOLLARS);
+      // Let the customer change their monthly amount on the Stripe page too.
+      lineItems.push({
+        price,
+        quantity,
+        adjustable_quantity: { enabled: true, minimum: 1, maximum: MAX_PWYW_DOLLARS },
+      });
+    } else {
+      lineItems.push({ price, quantity });
+    }
   }
 
   // Stripe only allows customer-chosen amounts in one-time payment mode.
@@ -52,7 +70,7 @@ export async function POST(request: NextRequest) {
     return Response.json(
       {
         error:
-          "Hosting subscriptions can't be combined with pay-what-you-can items in one checkout. Please check them out separately.",
+          "Monthly subscriptions can't be combined with the pay-what-you-can hour in one checkout. Please check them out separately.",
       },
       { status: 400 },
     );

@@ -8,6 +8,12 @@ export interface Product {
   emoji?: string;
   /** Set for subscription products; Stripe Checkout runs in subscription mode. */
   recurring?: "month";
+  /**
+   * Pay-what-you-want subscription. Stripe Checkout cannot take a
+   * customer-chosen amount on a recurring price, so the Stripe price is
+   * $1/month and the cart quantity is the number of dollars per month.
+   */
+  payWhatYouWant?: boolean;
 }
 
 export const products: Product[] = [
@@ -51,5 +57,17 @@ export const products: Product[] = [
     priceDisplay: "Pay what you can",
     category: "Support",
     emoji: "💙",
+  },
+  {
+    id: "chuck-in-your-corner",
+    name: "Chuck in Your Corner",
+    description:
+      "Ongoing moral support, billed monthly. Pay whatever feels right. Chuck stays in your corner, you stay sane. Cancel anytime.",
+    price: 100,
+    priceDisplay: "You pick /mo",
+    recurring: "month",
+    payWhatYouWant: true,
+    category: "Support",
+    emoji: "🥊",
   },
 ];
