@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Inter, Geist_Mono, Orbitron } from "next/font/google";
 import "./globals.css";
 import { Sidebar } from "@/components/Sidebar";
@@ -68,6 +69,11 @@ export default function RootLayout({
             </footer>
           </main>
         </CartProvider>
+        <Script
+          src="https://umami-f1cs.onrender.com/script.js"
+          data-website-id="88458890-6ab5-4d61-8ce8-304340c3a0cc"
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   );
